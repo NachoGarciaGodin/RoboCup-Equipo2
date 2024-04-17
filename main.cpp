@@ -50,8 +50,12 @@ int leerNumeroJugador(string mensajeRecibido){
 }
 
 
-int main()
+int main(int argc, char *argv[] )
 {
+    if (argc != 2) {
+        cout << "Falta indicar si es goalie" << endl;
+        return 1;
+    }
     srand(time(NULL));
     MinimalSocket::Port this_socket_port = rand() % (10000-5000+1) + 5000;
 
@@ -71,11 +75,14 @@ int main()
 
     // send a message to another udp
     MinimalSocket::Address other_recipient_udp = MinimalSocket::Address{"127.0.0.1", 6000};
-    udp_socket.sendTo("(init NottinghamMiedo(version 19))", other_recipient_udp);
+
+    if(argv[1]=="goalie"){
+    udp_socket.sendTo("(init NottinghamMiedo(version 19)(goalie))", other_recipient_udp);
     cout << "Message sent" << endl;
-    
-    //calcular posicion en funcion de argv ??
-    
+    }else{
+    udp_socket.sendTo("(init NottinghamMiedo(version 19))", other_recipient_udp);
+    }
+        
     cout << "Message sent" << endl;
     std::size_t message_max_size = 1000;
     cout << "Waiting for a message" << endl;

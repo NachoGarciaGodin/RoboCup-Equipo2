@@ -8,11 +8,13 @@ if [ $? -eq 0 ]; then
     echo "La compilación fue exitosa. Ejecutando el programa..."
 
     # Itera 11 veces
-    for i in {1..12}
+    gnome-terminal -- bash -c "./player goalie" &
+    
+    for i in {1..11}
     do
-        # Lanza el archivo ./player en una nueva terminal
+        # Lanza el archivo /player en una nueva terminal
         sleep 1
-        gnome-terminal -- "./player" &
+        gnome-terminal -- bash -c "./player j" &
     done
 else
     echo "Error: La compilación falló. No se puede ejecutar el programa."
