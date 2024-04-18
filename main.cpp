@@ -5,8 +5,7 @@
 #include <memory>
 #include <functional>
 #include <cstdlib>
-
-
+#include <fstream>
 
 using namespace std;
 
@@ -45,6 +44,7 @@ int leerNumeroJugador(string mensajeRecibido){
     int numero_jugador=0,pos;
     pos=mensaje.find(' ',7);
     mensaje_aux=mensaje.substr(7,pos-7);
+    cout << mensaje_aux << endl;
     numero_jugador=stoi(mensaje_aux);
     return numero_jugador;
 }
@@ -52,7 +52,7 @@ int leerNumeroJugador(string mensajeRecibido){
 
 int main(int argc, char *argv[] )
 {
-    if (argc != 2) {
+    if (argc != 3) {
         cout << "Falta indicar si es goalie" << endl;
         return 1;
     }
@@ -75,12 +75,12 @@ int main(int argc, char *argv[] )
 
     // send a message to another udp
     MinimalSocket::Address other_recipient_udp = MinimalSocket::Address{"127.0.0.1", 6000};
-
-    if(argv[1]=="goalie"){
-    udp_socket.sendTo("(init NottinghamMiedo(version 19)(goalie))", other_recipient_udp);
-    cout << "Message sent" << endl;
+    string nombre_equipo=argv[1];
+    if(argv[2]=="goalie"){
+        udp_socket.sendTo("(init "+nombre_equipo+"(version 19)(goalie))", other_recipient_udp);
+        cout << "Message sent" << endl;
     }else{
-    udp_socket.sendTo("(init NottinghamMiedo(version 19))", other_recipient_udp);
+        udp_socket.sendTo("(init "+nombre_equipo+"(version 19))", other_recipient_udp);
     }
         
     cout << "Message sent" << endl;
@@ -150,8 +150,16 @@ int main(int argc, char *argv[] )
     // resized to the nunber of bytes
     // actually received
     std::string received_message_content = received_message->received_message;
-      
+    //cout << received_message_content << endl; //se redirecciona al archivo
+    int posSee=0;
+    posSee=received_message_content.find("see",0);
+    if (posSee != -1){
+        auto posBall= received_message_content.find("(b)",posSee);
+        if (posBall != -1){
+            auto aux=received_message_content.substr(posBall,12);
+            //cout << aux << endl;
+        }
     }
-
+    }
 
 }
