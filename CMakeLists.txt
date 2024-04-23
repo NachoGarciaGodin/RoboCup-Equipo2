@@ -23,7 +23,10 @@ include_directories(${CMAKE_CURRENT_SOURCE_DIR}/_deps/min_sock-src/src/header)
 # ADD PATH FOR FINDING LIBRARIES
 link_directories(${CMAKE_CURRENT_SOURCE_DIR}/_deps/min_sock-src/build)
 
-add_executable(player main.cpp)
+
+
+
+add_executable(player main.cpp jugador.cpp funcionalidad.cpp)
 
 # LINK TO MinimalSocket
 target_link_libraries(player MinimalSocket)
@@ -32,5 +35,3 @@ install(TARGETS player
     LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
     RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
 )
-
-

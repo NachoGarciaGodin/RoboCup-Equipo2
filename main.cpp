@@ -1,82 +1,25 @@
 #include <iostream>
 #include <vector>
-#include <string>
 #include <algorithm>
 #include <memory>
 #include <functional>
-#include <cstdlib>
-#include <fstream>
 
-using namespace std;
+
+#include <chrono>
+#include <thread>
+
+#include "funcionalidad.h"
+#include "jugador.h"
 
 #include <MinimalSocket/udp/UdpSocket.h>
 
-vector<string> quitarParentesis(const string& cadena){
-    vector<string> palabras;
-    string palabra_actual; // (hola)(como)(estas)
-    int parentesis=0,posicion_inicial,i=0;
-    for (char caracter : cadena) {
-        if (caracter == '(') {
-            parentesis++;
-            if(parentesis==1)
-                posicion_inicial=i+1;
-        }else if(caracter==')'){
-            parentesis--;
-            if(parentesis == 0){
-                palabra_actual=cadena.substr(posicion_inicial,i-posicion_inicial);
-                if (!palabra_actual.empty()) {
-                    palabras.push_back(palabra_actual);
-                    palabra_actual.clear();
-                }
-            }
-        }
-        i++;
-    }
-    if (!palabra_actual.empty()) {
-        palabras.push_back(palabra_actual);
-    }
-    return palabras;
-}
+using namespace std;
 
-int leerNumeroJugador(string mensajeRecibido){
-    auto mensaje=quitarParentesis(mensajeRecibido).at(0);
-    string mensaje_aux;
-    int numero_jugador=0,pos;
-    pos=mensaje.find(' ',7);
-    mensaje_aux=mensaje.substr(7,pos-7);
-    cout << mensaje_aux << endl;
-    numero_jugador=stoi(mensaje_aux);
-    return numero_jugador;
-}
-
-char leerEquipo(string mensajeRecibido){
-    auto mensaje=quitarParentesis(mensajeRecibido).at(0);
-    auto aux=mensaje.at(5);
-    return aux;
-}
-
-float distanciaBalon(string mensajeRecibido){ // revisar decimales, no los coge
-    int distancia=0,pos;
-    pos=mensajeRecibido.find(' ',0);
-    string mensaje_aux=mensajeRecibido.substr(0,pos);
-    distancia=stof(mensaje_aux);
-    return distancia;
-}
-
-float orientacionBalon(string mensajeRecibido){
-    int orientacion=0,pos;
-    pos=mensajeRecibido.find(' ',0);
-    auto pos2=mensajeRecibido.find(')',pos);
-    if(pos2==-1)
-        pos2=mensajeRecibido.find(' ',pos+1); 
-    string mensaje_aux=mensajeRecibido.substr(pos+1,pos2-pos);
-    orientacion=stof(mensaje_aux);
-    return orientacion;
-}
 
 int main(int argc, char *argv[] )
 {
-    float distancia;
+    Jugador jugador;
+    float distancia = 0;
     float orientacion;
 
     if (argc != 3) {
@@ -110,67 +53,27 @@ int main(int argc, char *argv[] )
         udp_socket.sendTo("(init "+nombre_equipo+"(version 19))", other_recipient_udp);
     }
         
-    //cout << "Message sent" << endl;
     std::size_t message_max_size = 1000;
     //cout << "Waiting for a message" << endl;
     auto received_message = udp_socket.receive(message_max_size);
     // check the sender address
     MinimalSocket::Address other_sender_udp = received_message->sender;
-    //cout << "puerto" <<received_message->sender.getPort() << endl;
-    MinimalSocket::Address server_udp = MinimalSocket::Address{"127.0.0.1",received_message->sender.getPort() };
-    auto numero_jugador=leerNumeroJugador(received_message->received_message);
-    //cout << "Numero jugador: " << numero_jugador << endl;
-    auto equipo=leerEquipo(received_message->received_message);
-    //cout << "Equipo: " << equipo << endl;
-    
-    switch(numero_jugador){
-        case 1:
-            udp_socket.sendTo("(move -51 0)", server_udp); //-51 0
-            break;
-        case 2:
-            udp_socket.sendTo("(move -30 -30)", server_udp);
-            break;
-        case 3:
-            udp_socket.sendTo("(move -35 -10)", server_udp);
-            break;
-        case 4:
-            udp_socket.sendTo("(move -35 10)", server_udp);
-            break;
-        case 5:
-            udp_socket.sendTo("(move -30 30)", server_udp);
-            break;
-        case 6:
-            udp_socket.sendTo("(move -25 -10)", server_udp);
-            break;
-        case 7:
-            udp_socket.sendTo("(move -25 10)", server_udp);
-            break;
-        case 8:
-            udp_socket.sendTo("(move -11 0)", server_udp);
-            break;
-        case 9:
-            udp_socket.sendTo("(move -0.5 -27)", server_udp);
-            break;
-        case 10:
-            udp_socket.sendTo("(move -0.5 27)", server_udp);
-            break;
-        case 11:
-            if (equipo=='l')
-                udp_socket.sendTo("(move -0.4 0.15)", server_udp);
-            else
-                udp_socket.sendTo("(move -0.75 -10)", server_udp);
-            break;
-        default:
-            udp_socket.sendTo("(move 0 0)", server_udp);
-            break;
-    }
+    MinimalSocket::Address server_udp = MinimalSocket::Address{"127.0.0.1", other_sender_udp.getPort()};
 
-    // access the received message
-    // resized to the nunber of bytes
-    // actually received
+    iniciarJugador(received_message->received_message, jugador);
+
+    
+
     std::string received_message_content = received_message->received_message;
     //cout << received_message_content << endl; 
+    colocarJugadorSegunNumero(jugador, udp_socket, server_udp);   
 
+    received_message = udp_socket.receive(message_max_size);
+    
+    if(jugador.equipo == "r" ){
+        std::this_thread::sleep_for(std::chrono::milliseconds(130));
+        girarEquipoVisitante(udp_socket, server_udp);
+    }
     
     while(1){
        // receive a message from another udp reaching this one
@@ -179,6 +82,7 @@ int main(int argc, char *argv[] )
     auto received_message = udp_socket.receive(message_max_size);
     // check the sender address
     MinimalSocket::Address other_sender_udp = received_message->sender;
+
     
     // access the received message
     // resized to the nunber of bytes
@@ -187,8 +91,9 @@ int main(int argc, char *argv[] )
     //cout << received_message_content << endl; //se redirecciona al archivo
 
     //Esto es el saque
-    if(numero_jugador==11 && equipo=='l'){
-        udp_socket.sendTo("(kick 50 0)", server_udp);
+    if(jugador.numero == 11 && jugador.equipo=="l"){
+        string aux = golpearBalon("50","0");
+        udp_socket.sendTo(aux, server_udp);
     }
 
     int posSee=0;
@@ -204,10 +109,8 @@ int main(int argc, char *argv[] )
             //cout << orientacion << endl;
         }
     }
-    if(numero_jugador==11)
-        udp_socket.sendTo("(dash 50)", server_udp);
-
-
+        if(jugador.numero == 11)
+        udp_socket.sendTo("(dash 100)", server_udp);
     }
     
 }
