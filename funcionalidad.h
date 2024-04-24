@@ -26,9 +26,7 @@ void iniciarJugador(string const &, Jugador &);
 
 void girarEquipoVisitante(MinimalSocket::udp::Udp<true> &, MinimalSocket::Address const &);
 
-void decidirComando(Jugador, float &, float &, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address);
 
-string orientarJugador(string const & );
 
 
 float orientacionBalon(string const &);

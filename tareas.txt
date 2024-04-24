@@ -1,5 +1,0 @@
-
-- Hacer funcion para el envio de mensajes directa
-- Sacar los flags de la porteria
-- Posicion del jugador
-- Veeelocidad del jugador inversamente proporcional a la distancia
