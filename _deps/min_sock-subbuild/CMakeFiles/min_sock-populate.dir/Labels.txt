@@ -1,0 +1,14 @@
+# Target labels
+ min_sock-populate
+# Source files and their labels
+/home/danie/Documents/GitHub/RoboCup-Equipo2/_deps/min_sock-subbuild/CMakeFiles/min_sock-populate
+/home/danie/Documents/GitHub/RoboCup-Equipo2/_deps/min_sock-subbuild/CMakeFiles/min_sock-populate.rule
+/home/danie/Documents/GitHub/RoboCup-Equipo2/_deps/min_sock-subbuild/CMakeFiles/min_sock-populate-complete.rule
+/home/danie/Documents/GitHub/RoboCup-Equipo2/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-build.rule
+/home/danie/Documents/GitHub/RoboCup-Equipo2/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-configure.rule
+/home/danie/Documents/GitHub/RoboCup-Equipo2/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-download.rule
+/home/danie/Documents/GitHub/RoboCup-Equipo2/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-install.rule
+/home/danie/Documents/GitHub/RoboCup-Equipo2/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-mkdir.rule
+/home/danie/Documents/GitHub/RoboCup-Equipo2/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-patch.rule
+/home/danie/Documents/GitHub/RoboCup-Equipo2/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-test.rule
+/home/danie/Documents/GitHub/RoboCup-Equipo2/_deps/min_sock-subbuild/min_sock-populate-prefix/src/min_sock-populate-stamp/min_sock-populate-update.rule

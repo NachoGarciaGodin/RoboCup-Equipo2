@@ -114,6 +114,18 @@ string golpearBalon(string const & power, string const & direction){
 
 }
 
+string orientarJugador(string const & gradosAOrientarse){
+
+    string msgEnvio {"(turn "};
+
+    msgEnvio.append(gradosAOrientarse);
+    msgEnvio.append(" )");
+
+
+    return msgEnvio;
+
+}
+
 /*
 void colocarJugadores(MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
     for(auto pos : posicionesIniciales){
@@ -141,7 +153,6 @@ void girarEquipoVisitante(MinimalSocket::udp::Udp<true> & socket, MinimalSocket:
 void iniciarJugador(string const & mensajeInicial, Jugador & jugador){
 
     auto parsedMsg = quitarParentesis(mensajeInicial).at(0);
-    cout << parsedMsg << endl;
     auto doubleParsedMsg = dividir_en_palabras(parsedMsg);
 
     
@@ -150,3 +161,37 @@ void iniciarJugador(string const & mensajeInicial, Jugador & jugador){
 
 
 }
+
+void decidirComando(Jugador jugador, float & distanciaAlBalon, float & orientacionAlBalon, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
+    
+    const float velocidadBase = 10;
+    if (jugador.numero == 8 && jugador.equipo == "l"){
+    }
+    if(distanciaAlBalon <= 0.3){
+        socket.sendTo(golpearBalon("100","0"), address);
+    }
+    else if (abs(orientacionAlBalon) > 10 )
+    {
+        socket.sendTo(orientarJugador(to_string(10)), address);
+    }
+    else {
+        
+        float velocidad = (distanciaAlBalon * 100) / velocidadBase ;
+        socket.sendTo("(dash " + to_string(velocidad) + ")", address);
+    }
+
+    
+}
+
+/*
+string comprobarKickOff (const string & mensaje){ // (hear 0 referee kick_off_l)) 
+        auto parsedMsg = quitarParentesis(mensaje).at(0);
+        cout << parsedMsg << endl;
+        auto doubleParsedMsg = dividir_en_palabras(parsedMsg);
+
+        if (doubleParsedMsg.size() == 4) {
+            if (doubleParsedMsg.at(3) == "kick_off_l" || doubleParsedMsg.at(3) == "kick_off_r"))
+            
+}
+
+*/
