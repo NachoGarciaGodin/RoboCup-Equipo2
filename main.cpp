@@ -19,8 +19,8 @@ using namespace std;
 int main(int argc, char *argv[] )
 {
     Jugador jugador;
-    float distancia = 0;
-    float orientacion;
+    float distanciaAlBalon = 10;
+    float orientacionAlBalon = 70;
 
     if (argc != 3) {
         cout << "Falta indicar si es goalie" << endl;
@@ -76,25 +76,16 @@ int main(int argc, char *argv[] )
     }
     
     while(1){
-       // receive a message from another udp reaching this one
+    // receive a message from another udp reaching this one
     std::size_t message_max_size = 1000;
     
     auto received_message = udp_socket.receive(message_max_size);
-    // check the sender address
     MinimalSocket::Address other_sender_udp = received_message->sender;
 
-    
-    // access the received message
-    // resized to the nunber of bytes
-    // actually received
     std::string received_message_content = received_message->received_message;
-    //cout << received_message_content << endl; //se redirecciona al archivo
+    //cout << received_message_content << endl;
 
-    //Esto es el saque
-    if(jugador.numero == 11 && jugador.equipo=="l"){
-        string aux = golpearBalon("50","0");
-        udp_socket.sendTo(aux, server_udp);
-    }
+   
 
     int posSee=0;
     posSee=received_message_content.find("see",0);
@@ -102,15 +93,11 @@ int main(int argc, char *argv[] )
         auto posBall= received_message_content.find("(b)",posSee);
         if (posBall != -1){
             auto aux=received_message_content.substr(posBall+4,8); 
-            distancia = distanciaBalon(aux);
-            orientacion = orientacionBalon(aux);
-            //cout << aux << endl;
-            //cout << distancia << endl;
-            //cout << orientacion << endl;
+            distanciaAlBalon = distanciaBalon(aux);
+            orientacionAlBalon = orientacionBalon(aux);
         }
     }
-        if(jugador.numero == 11)
-        udp_socket.sendTo("(dash 100)", server_udp);
+
+    decidirComando(jugador, distanciaAlBalon, orientacionAlBalon, udp_socket, server_udp);
     }
-    
 }

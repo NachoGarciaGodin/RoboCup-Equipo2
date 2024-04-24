@@ -20,7 +20,6 @@ public:
     ~Jugador() {}
 
 
-
     // Atributos privados
     int numero;
     string equipo;

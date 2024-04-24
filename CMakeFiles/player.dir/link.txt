@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/player.dir/main.cpp.o CMakeFiles/player.dir/jugador.cpp.o CMakeFiles/player.dir/funcionalidad.cpp.o -o player   -L/home/danie/Documents/GitHub/RoboCup-Equipo2/_deps/min_sock-src/build  -Wl,-rpath,/home/danie/Documents/GitHub/RoboCup-Equipo2/_deps/min_sock-src/build: _deps/min_sock-build/src/libMinimalSocket.a 

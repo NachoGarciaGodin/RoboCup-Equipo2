@@ -1,0 +1,11 @@
+ //Esto es el saque
+    if(jugador.numero == 11 && jugador.equipo=="l"){
+        string aux = golpearBalon("50","0");
+        udp_socket.sendTo(aux, server_udp);
+    }
+
+
+    
+        if(jugador.numero == 11)
+        udp_socket.sendTo("(dash 100)", server_udp);
+    }
