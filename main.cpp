@@ -21,6 +21,8 @@ int main(int argc, char *argv[] )
     Jugador jugador;
     float distanciaAlBalon = 10;
     float orientacionAlBalon = 70;
+    string quienSaca;
+    bool kickOff=0;
 
     if (argc != 3) {
         cout << "Falta indicar si es goalie" << endl;
@@ -104,6 +106,16 @@ int main(int argc, char *argv[] )
             auto aux=received_message_content.substr(posBall+4,8); 
             distanciaAlBalon = distanciaBalon(aux);
             orientacionAlBalon = orientacionBalon(aux);
+        }
+    }
+
+    int posHear=0;
+    posHear=received_message_content.find("hear",0);
+    if (posHear != -1){
+        auto posKickOff= received_message_content.find("kick_off",posHear);
+        if (posKickOff != -1){
+            quienSaca=received_message_content.substr(posKickOff+9,1); 
+            kickOff=1;
         }
     }
 

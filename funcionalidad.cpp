@@ -198,3 +198,17 @@ string comprobarKickOff (const string & mensaje){ // (hear 0 referee kick_off_l)
 }
 
 */
+
+
+// string comprobarKickOff (const string & mensaje){ // (hear 0 referee kick_off_l)) 
+//         auto parsedMsg = quitarParentesis(mensaje).at(0);
+//         cout << parsedMsg << endl;
+//         auto doubleParsedMsg = dividir_en_palabras(parsedMsg);
+//         auto kick_off_team="";
+//         if (doubleParsedMsg.size() == 4) {
+//             if (doubleParsedMsg.at(3) == "kick_off_l" )//|| doubleParsedMsg.at(3) == "kick_off_r"
+//                 kick_off_team="left";
+//             else if(doubleParsedMsg.at(3)=="kick_off_r") kick_off_team="right";
+//             return kick_off_team;
+//         }
+// }
