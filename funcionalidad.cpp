@@ -167,7 +167,7 @@ void decidirComando(Jugador jugador, float & distanciaAlBalon, float & orientaci
     const float velocidadBase = 10;
     if (jugador.numero == 8 && jugador.equipo == "l"){
     }
-    if(distanciaAlBalon <= 0.3){
+    if(distanciaAlBalon <= 1){
         socket.sendTo(golpearBalon("100","0"), address);
     }
     else if (abs(orientacionAlBalon) > 10 )
@@ -177,6 +177,8 @@ void decidirComando(Jugador jugador, float & distanciaAlBalon, float & orientaci
     else {
         
         float velocidad = (distanciaAlBalon * 100) / velocidadBase ;
+        if (velocidad < velocidadBase)
+            velocidad = 10;
         socket.sendTo("(dash " + to_string(velocidad) + ")", address);
     }
 

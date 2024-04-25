@@ -1,3 +1,0 @@
-repository='https://github.com/andreacasalino/Minimal-Socket'
-module=''
-tag='origin'
