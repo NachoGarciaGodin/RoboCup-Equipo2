@@ -72,7 +72,7 @@ int main(int argc, char *argv[] )
 
     received_message = udp_socket.receive(message_max_size);
     
-    if(jugador.equipo == "r" ){
+    if(jugador.equipo == "r" && kickOff==0){
         std::this_thread::sleep_for(std::chrono::milliseconds(130));
         girarEquipoVisitante(udp_socket, server_udp);
     }
@@ -97,7 +97,7 @@ int main(int argc, char *argv[] )
     //cout << received_message_content << endl;
 
    
-    
+
     int posSee=0;
     posSee=received_message_content.find("see",0);
     if (posSee != -1){
@@ -118,7 +118,7 @@ int main(int argc, char *argv[] )
             kickOff=1;
         }
     }
-
-    decidirComando(jugador, distanciaAlBalon, orientacionAlBalon, udp_socket, server_udp);
+    if(kickOff==1)
+        decidirComando(jugador, distanciaAlBalon, orientacionAlBalon, udp_socket, server_udp);
     }
 }
