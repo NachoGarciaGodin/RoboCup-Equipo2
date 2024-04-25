@@ -10,11 +10,11 @@
 
 #include "funcionalidad.h"
 #include "jugador.h"
+#include "tictoc.h"
 
 #include <MinimalSocket/udp/UdpSocket.h>
 
 using namespace std;
-
 
 int main(int argc, char *argv[] )
 {
@@ -74,19 +74,28 @@ int main(int argc, char *argv[] )
         std::this_thread::sleep_for(std::chrono::milliseconds(130));
         girarEquipoVisitante(udp_socket, server_udp);
     }
-    
+    TicToc clock;
+    clock.tic();
     while(1){
+   
+    while (clock.toc() < 100){
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    }
+    clock.tic();
+    
+
+
     // receive a message from another udp reaching this one
     std::size_t message_max_size = 1000;
-    
+   
     auto received_message = udp_socket.receive(message_max_size);
     MinimalSocket::Address other_sender_udp = received_message->sender;
-
+    
     std::string received_message_content = received_message->received_message;
     //cout << received_message_content << endl;
 
    
-
+    
     int posSee=0;
     posSee=received_message_content.find("see",0);
     if (posSee != -1){

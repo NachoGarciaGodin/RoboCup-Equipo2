@@ -167,12 +167,13 @@ void decidirComando(Jugador jugador, float & distanciaAlBalon, float & orientaci
     const float velocidadBase = 10;
     if (jugador.numero == 8 && jugador.equipo == "l"){
     }
-    if(distanciaAlBalon <= 1){
+    if(distanciaAlBalon <= 0.6){
+        cout << jugador.numero << "ha golpeado/quiere " << endl;
         socket.sendTo(golpearBalon("100","0"), address);
     }
-    else if (abs(orientacionAlBalon) > 10 )
+    else if (abs(orientacionAlBalon) > 20 )
     {
-        socket.sendTo(orientarJugador(to_string(10)), address);
+        socket.sendTo(orientarJugador(to_string(20)), address);
     }
     else {
         
