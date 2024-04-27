@@ -7,17 +7,19 @@ make
 if [ $? -eq 0 ]; then
     echo "La compilación fue exitosa. Ejecutando el programa..."
 
+    sleep 1
+
     # Itera 11 veces
         /home/nacho/Escritorio/RoboCup-Equipo2/player NottighamMiedo goalie &
     
     for i in {1..10}
     do
         # Lanza el archivo /player en una nueva terminal
-        sleep 1.5
+        sleep 1
         /home/nacho/Escritorio/RoboCup-Equipo2/player  NottighamMiedo j &
     done
 
-    sleep 1.5
+    sleep 1
 
     # Itera 11 veces
         /home/nacho/Escritorio/RoboCup-Equipo2/player LosCojos goalie &
@@ -25,7 +27,7 @@ if [ $? -eq 0 ]; then
     for i in {1..10}
     do
         # Lanza el archivo /player en una nueva terminal
-        sleep 1.5
+        sleep 1
         /home/nacho/Escritorio/RoboCup-Equipo2/player LosCojos j &
     done
 

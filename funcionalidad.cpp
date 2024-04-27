@@ -7,6 +7,7 @@
 #include <memory>
 #include <functional>
 #include <string>
+#include <thread>
 
 #include <MinimalSocket/udp/UdpSocket.h>
 
@@ -17,7 +18,7 @@ using namespace std;
 
 const vector<pair<int, int>> posicionesIniciales = {
     {-51, 0}, {-30, -30}, {-35, -10}, {-35, 10}, {-30, 30}, 
-    {-25, -10}, {-25, 10}, {-11, 0}, {-0.5, -27}, {-0.5, 27}, {-0.75, -10}, {-0.4, 0.15}
+    {-25, -10}, {-25, 10}, {-11, 0}, {-2, -27}, {-2, 27}, {-0.75, -10}, {-1, 0}
 };
 
 
@@ -159,31 +160,30 @@ void iniciarJugador(string const & mensajeInicial, Jugador & jugador){
     jugador.equipo = doubleParsedMsg.at(1);
     jugador.numero = stoi(doubleParsedMsg.at(2));
 
-
 }
 
 void decidirComando(Jugador jugador, float & distanciaAlBalon, float & orientacionAlBalon, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
     
+    // cout << "Distancia al balon: " << distanciaAlBalon << endl;
+    // cout << "Orientacion al balon: " << orientacionAlBalon << endl;
+
     const float velocidadBase = 10;
-    if (jugador.numero == 8 && jugador.equipo == "l"){
+    if((distanciaAlBalon < 0.6)){
+        // socket.sendTo("(dash " + to_string(0) + ")", address);
+        // std::this_thread::sleep_for(std::chrono::milliseconds(100));
+        socket.sendTo(golpearBalon("20","0"), address);
+        //cout << jugador.numero << "ha golpeado/quiere " << endl;
     }
-    if(distanciaAlBalon <= 0.6){
-        cout << jugador.numero << "ha golpeado/quiere " << endl;
-        socket.sendTo(golpearBalon("100","0"), address);
-    }
-    else if (abs(orientacionAlBalon) > 20 )
+    else if ((abs(orientacionAlBalon) > 20))
     {
-        socket.sendTo(orientarJugador(to_string(20)), address);
+        socket.sendTo(orientarJugador(to_string(5)), address); 
     }
-    else {
-        
+    else{ //if((abs(orientacionAlBalon)<10) && (distanciaAlBalon>0.3))
         float velocidad = (distanciaAlBalon * 100) / velocidadBase ;
         if (velocidad < velocidadBase)
-            velocidad = 10;
+            velocidad = velocidadBase;
         socket.sendTo("(dash " + to_string(velocidad) + ")", address);
     }
-
-    
 }
 
 /*
