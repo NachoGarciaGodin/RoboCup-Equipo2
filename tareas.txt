@@ -1,5 +1,8 @@
 
 - Hacer funcion para el envio de mensajes directa
-- Sacar los flags de la porteria
 - Posicion del jugador
-- Veeelocidad del jugador inversamente proporcional a la distancia
+- Girar a ambos lados para orientarse
+- Posicionarse bien para Sacar
+- Detectar nuevos KickOff, es decir, poner KickOff a '0' en algún momento, como el descanso.
+- Saques de banda
+- definir tipos de jugadores para que tengan comportamientos distintos

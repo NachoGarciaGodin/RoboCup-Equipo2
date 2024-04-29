@@ -142,7 +142,6 @@ void colocarJugadorSegunNumero(Jugador jugador, MinimalSocket::udp::Udp<true> & 
         socket.sendTo(colocarJugador(posicionesIniciales.at(jugador.numero - 1).first, posicionesIniciales.at(jugador.numero - 1).second),address);
        
     }
-        
 }
 
 void girarEquipoVisitante(MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address)
