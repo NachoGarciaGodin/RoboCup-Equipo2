@@ -19,11 +19,8 @@ using namespace std;
 int main(int argc, char *argv[] )
 {
     Jugador jugador;
-    float distanciaAlBalon = 10;
-    float orientacionAlBalon = 70;
     string quienSaca;
     bool kickOff=0;
-    float distanciaPorteria=0, orientacionPorteria=0;
 
     if (argc != 3) {
         cout << "Falta indicar si es goalie" << endl;
@@ -68,8 +65,8 @@ int main(int argc, char *argv[] )
     
 
     std::string received_message_content = received_message->received_message;
-    //cout << received_message_content << endl; 
-    //std::this_thread::sleep_for(std::chrono::milliseconds(150));
+
+
     colocarJugadorSegunNumero(jugador, udp_socket, server_udp);   
 
     received_message = udp_socket.receive(message_max_size);
@@ -83,11 +80,6 @@ int main(int argc, char *argv[] )
     clock.tic();
 
     while(1){
-   
-    // while (clock.toc() < (1)){
-    //     std::this_thread::sleep_for(std::chrono::milliseconds(1/10));
-    // }
-    // clock.tic();
 
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
@@ -103,42 +95,18 @@ int main(int argc, char *argv[] )
     int posSee=0;
     posSee=received_message_content.find("see",0);
     if (posSee != -1 && kickOff==1){
-        auto posBall= received_message_content.find("(b)",posSee);
-        if (posBall != -1){
-            auto aux=received_message_content.substr(posBall+4,8); 
-            distanciaAlBalon = distanciaBalon(aux);
-            orientacionAlBalon = orientacionBalon(aux);
-        }
+        encontrarCadena(received_message_content, jugador);
     }
 
     if(kickOff==0){ //para que sólo se ejecute una vez
         int posHear=0;
         posHear=received_message_content.find("hear",0);
         if (posHear != -1){
-            auto posKickOff= received_message_content.find("kick_off",posHear);
-            if (posKickOff != -1){
-                quienSaca=received_message_content.substr(posKickOff+9,1); 
-                kickOff=1;
-            }
+            kickOff=comprobarKickOff(received_message_content, quienSaca);
         }
     }
-
-    int posFlagPorteria=0, flagPorteriaAux; // ((g r) 60.9 26)
-    posFlagPorteria=received_message_content.find("see",0);
-    if (posFlagPorteria != -1 && kickOff==1){
-        if(jugador.equipo=="r")
-            flagPorteriaAux= received_message_content.find("(g l)",posSee);
-        else
-            flagPorteriaAux= received_message_content.find("(g r)",posSee);
-        if (flagPorteriaAux != -1){
-            auto aux=received_message_content.substr(flagPorteriaAux+6,8); 
-            distanciaPorteria=distanciaBalon(aux);
-            orientacionPorteria=orientacionBalon(aux);
-        }
-    }
-    
-    if( (kickOff==1 && jugador.numero==11)){ // 
-        decidirComando(jugador, distanciaAlBalon, orientacionAlBalon, distanciaPorteria, orientacionPorteria, udp_socket, server_udp);
+    if( (kickOff==1)){ // 
+        decidirComando(jugador, udp_socket, server_udp);
     }
     
     

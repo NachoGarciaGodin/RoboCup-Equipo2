@@ -26,13 +26,15 @@ void iniciarJugador(string const &, Jugador &);
 
 void girarEquipoVisitante(MinimalSocket::udp::Udp<true> &, MinimalSocket::Address const &);
 
-void decidirComando(Jugador, float &, float &, float &, float &, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address);
+void decidirComando(Jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address);
 
 string orientarJugador(string const & );
 
+void encontrarCadena(string const &, Jugador &);
 
-float orientacionBalon(string const &);
+float orientacion(string const &);
 
-float distanciaBalon(string const & );
+float distancia(string const & );
+bool comprobarKickOff (const string &, string &);
 
 #endif // FUNCIONALIDAD_H
