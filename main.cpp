@@ -23,6 +23,7 @@ int main(int argc, char *argv[] )
     float orientacionAlBalon = 70;
     string quienSaca;
     bool kickOff=0;
+    float distanciaPorteria=0, orientacionPorteria=0;
 
     if (argc != 3) {
         cout << "Falta indicar si es goalie" << endl;
@@ -122,8 +123,22 @@ int main(int argc, char *argv[] )
         }
     }
 
+    int posFlagPorteria=0, flagPorteriaAux; // ((g r) 60.9 26)
+    posFlagPorteria=received_message_content.find("see",0);
+    if (posFlagPorteria != -1 && kickOff==1){
+        if(jugador.equipo=="r")
+            flagPorteriaAux= received_message_content.find("(g l)",posSee);
+        else
+            flagPorteriaAux= received_message_content.find("(g r)",posSee);
+        if (flagPorteriaAux != -1){
+            auto aux=received_message_content.substr(flagPorteriaAux+6,8); 
+            distanciaPorteria=distanciaBalon(aux);
+            orientacionPorteria=orientacionBalon(aux);
+        }
+    }
+    
     if( (kickOff==1 && jugador.numero==11)){ // 
-        decidirComando(jugador, distanciaAlBalon, orientacionAlBalon, udp_socket, server_udp);
+        decidirComando(jugador, distanciaAlBalon, orientacionAlBalon, distanciaPorteria, orientacionPorteria, udp_socket, server_udp);
     }
     
     

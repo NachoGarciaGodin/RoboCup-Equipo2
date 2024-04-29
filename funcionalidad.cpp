@@ -162,16 +162,16 @@ void iniciarJugador(string const & mensajeInicial, Jugador & jugador){
 
 }
 
-void decidirComando(Jugador jugador, float & distanciaAlBalon, float & orientacionAlBalon, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
+void decidirComando(Jugador jugador, float & distanciaAlBalon, float & orientacionAlBalon, float & distanciaPorteria, float & orientacionPorteria,MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
     
     // cout << "Distancia al balon: " << distanciaAlBalon << endl;
     // cout << "Orientacion al balon: " << orientacionAlBalon << endl;
 
-    const float velocidadBase = 10;
+    const float velocidadBase = 20;
     if((distanciaAlBalon < 0.6)){
         // socket.sendTo("(dash " + to_string(0) + ")", address);
         // std::this_thread::sleep_for(std::chrono::milliseconds(100));
-        socket.sendTo(golpearBalon("20","0"), address);
+        socket.sendTo(golpearBalon("20", to_string(orientacionPorteria)), address);
         //cout << jugador.numero << "ha golpeado/quiere " << endl;
     }
     else if ((abs(orientacionAlBalon) > 20))
