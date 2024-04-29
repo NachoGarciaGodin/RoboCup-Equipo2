@@ -21,8 +21,7 @@ public:
         float distancia;
         float orientacion;
     };
-    // Constructor
-    Jugador(int num, string eq, float distanciaBalon, float orientacionBalon, float ang) : numero(num), equipo(eq),  distanciaBalon(distanciaBalon), orientacionBalon(orientacionBalon), angRotacion(ang) {}
+    
 
     Jugador(){}
 
@@ -34,8 +33,9 @@ public:
     int numero;
     string equipo;
     float angRotacion;
-    float orientacionBalon = 30;
-    float distanciaBalon = 3;
+    int tipoJugador;
+    float orientacionAlBalon = 30;
+    float distanciaAlBalon = 3;
     float orientacionPorteria;
     float distanciaPorteria;
 

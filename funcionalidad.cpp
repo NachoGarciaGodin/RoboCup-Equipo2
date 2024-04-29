@@ -80,8 +80,8 @@ void encontrarCadena(string const & mensajeInicial, Jugador & jugador) {
         int posFlagPorteria=-1;
         if (posBall != -1){
             string aux = mensajeInicial.substr(posBall+4,8); 
-            jugador.distanciaBalon = distancia(aux);
-            jugador.orientacionBalon = orientacion(aux);
+            jugador.distanciaAlBalon = distancia(aux);
+            jugador.orientacionAlBalon = orientacion(aux);
         }
         if(jugador.equipo=="r")
             posFlagPorteria= mensajeInicial.find("(g l)",posSee);
@@ -177,6 +177,7 @@ void girarEquipoVisitante(MinimalSocket::udp::Udp<true> & socket, MinimalSocket:
 }
 
 
+
 void iniciarJugador(string const & mensajeInicial, Jugador & jugador){
 
     auto parsedMsg = quitarParentesis(mensajeInicial).at(0);
@@ -185,24 +186,75 @@ void iniciarJugador(string const & mensajeInicial, Jugador & jugador){
     
     jugador.equipo = doubleParsedMsg.at(1);
     jugador.numero = stoi(doubleParsedMsg.at(2));
-
+    if( (jugador.numero>1) && (jugador.numero <6))
+        jugador.tipoJugador = 1;
+    else if((jugador.numero>5) && (jugador.numero <9))
+        jugador.tipoJugador = 2;
+    else if(jugador.numero>8)
+        jugador.tipoJugador = 3;
+    else
+        jugador.tipoJugador = 0;
 }
 
-void decidirComando(Jugador jugador,MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
+
+
+void decidirComando(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
 
     const float velocidadBase = 20;
-    if((jugador.distanciaBalon < 0.6)){
-        socket.sendTo(golpearBalon("20", to_string(jugador.orientacionPorteria)), address);
-    }
-    else if ((abs(jugador.orientacionBalon) > 20))
-    {
-        socket.sendTo(orientarJugador(to_string(5)), address); 
-    }
-    else{ 
-        float velocidad = (jugador.distanciaBalon * 100) / velocidadBase ;
-        if (velocidad < velocidadBase)
-            velocidad = velocidadBase;
-        socket.sendTo("(dash " + to_string(velocidad) + ")", address);
+    bool PelotaenManos=0;
+    switch(jugador.tipoJugador){
+        case 0:
+            if(PelotaenManos==1){
+                socket.sendTo(golpearBalon("100", to_string(jugador.orientacionPorteria)), address);
+                PelotaenManos=0;
+            }
+            else if(jugador.distanciaAlBalon<0.6){
+                socket.sendTo("(catch " + to_string(jugador.orientacionAlBalon) + ")", address);
+                PelotaenManos=1;
+            }
+            break;
+        case 1: 
+            if((jugador.orientacionAlBalon > 20))
+                socket.sendTo(orientarJugador("10"), address);
+            else if(jugador.orientacionAlBalon < -20)
+                socket.sendTo(orientarJugador("-10"), address);
+            else if(jugador.distanciaAlBalon > 30)
+                 socket.sendTo("(dash " + to_string(30) + ")", address);
+            else if((jugador.distanciaAlBalon < 30) && (jugador.distanciaAlBalon > 5))
+                socket.sendTo("(dash 5)", address);
+            else if((jugador.distanciaAlBalon < 5) && (jugador.distanciaAlBalon > 0.6))
+                socket.sendTo("(dash 50)", address);
+            else if(jugador.distanciaAlBalon < 0.6)
+                socket.sendTo(golpearBalon("20", to_string(jugador.orientacionPorteria)), address);
+            break;
+        case 2:
+            if((jugador.orientacionAlBalon > 20))
+                socket.sendTo(orientarJugador("10"), address);
+            else if(jugador.orientacionAlBalon < -20)
+                socket.sendTo(orientarJugador("-10"), address);
+            else if(jugador.distanciaAlBalon > 15)
+                 socket.sendTo("(dash " + to_string(30) + ")", address);
+            else if((jugador.distanciaAlBalon < 15) && (jugador.distanciaAlBalon > 5))
+                socket.sendTo("(dash 5)", address);
+                else if((jugador.distanciaAlBalon < 5) && (jugador.distanciaAlBalon > 0.6))
+                socket.sendTo("(dash 50)", address);
+            else if(jugador.distanciaAlBalon < 0.6)
+                socket.sendTo(golpearBalon("20", to_string(jugador.orientacionPorteria)), address);
+            break;
+        case 3:
+            if((jugador.orientacionAlBalon > 20))
+                socket.sendTo(orientarJugador("10"), address);
+            else if(jugador.orientacionAlBalon < -20)
+                socket.sendTo(orientarJugador("-10"), address);
+            else if(jugador.distanciaAlBalon < 0.6)
+                socket.sendTo(golpearBalon("20", to_string(jugador.orientacionPorteria)), address);
+            else{ 
+                float velocidad = (jugador.distanciaAlBalon * 100) / velocidadBase ;
+                if (velocidad < velocidadBase)
+                    velocidad = velocidadBase;
+                socket.sendTo("(dash " + to_string(velocidad) + ")", address);
+            }
+            break;
     }
 }
 

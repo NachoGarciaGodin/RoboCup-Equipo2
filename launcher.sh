@@ -8,25 +8,26 @@ if [ $? -eq 0 ]; then
     echo "La compilación fue exitosa. Ejecutando el programa..."
 
     # Itera 11 veces
-        /home/laura/Documents/GitHub/RoboCup-Equipo2/player NottighamMiedo goalie &
+        /home/nacho/Escritorio/RoboCup-Equipo2/player NottighamMiedo goalie &
     
     for i in {1..10}
     do
         # Lanza el archivo /player en una nueva terminal
         sleep 1.5
-        /home/laura/Documents/GitHub/RoboCup-Equipo2/player  NottighamMiedo j &
+        /home/nacho/Escritorio/RoboCup-Equipo2/player  NottighamMiedo j &
     done
 
     sleep 1.5
 
     # Itera 11 veces
-        /home/laura/Documents/GitHub/RoboCup-Equipo2/player LosCojos goalie &
+        /home/nacho/Escritorio/RoboCup-Equipo2/player LosCojos goalie &
+        
     
     for i in {1..10}
     do
         # Lanza el archivo /player en una nueva terminal
         sleep 1.5
-        /home/laura/Documents/GitHub/RoboCup-Equipo2/player LosCojos j &
+        /home/nacho/Escritorio/RoboCup-Equipo2/player LosCojos j &
     done
 
 else
