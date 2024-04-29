@@ -6,3 +6,26 @@
 - Detectar nuevos KickOff, es decir, poner KickOff a '0' en algún momento, como el descanso.
 - Saques de banda
 - definir tipos de jugadores para que tengan comportamientos distintos
+
+
+/* Del profe
+while (1)
+    {
+        // PROCESS MESSAGES
+        do
+        {
+            auto received_message = udp_socket.receive(message_max_size);
+            std::string received_message_content = received_message->received_message;
+            try
+            {
+                // player = Parser::parseSeverMessage(received_message_content, player);
+            }
+            catch (const std::exception &e)
+            {
+                cout << e.what() << endl;
+            }
+        } while (!received_message_content.find("(see") == std::string::npos || clock.toc() < 100);
+        // ACTION (whenever a see message is received)
+        cout << "time: " << clock.toc() << "ms" << endl;
+        clock.tic();
+*/
