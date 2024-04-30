@@ -9,6 +9,7 @@
 #include <thread>
 
 #include "funcionalidad.h"
+#include "envioPaquetes.h"
 #include "jugador.h"
 #include "tictoc.h"
 
