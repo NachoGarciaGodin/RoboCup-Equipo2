@@ -1,0 +1,7 @@
+add_test( encontrarCadena.errorMensajeSeeParsed /home/laura/Documents/GitHub/RoboCup-Equipo2/tests/runTests [==[--gtest_filter=encontrarCadena.errorMensajeSeeParsed]==] --gtest_also_run_disabled_tests)
+set_tests_properties( encontrarCadena.errorMensajeSeeParsed PROPERTIES WORKING_DIRECTORY /home/laura/Documents/GitHub/RoboCup-Equipo2/tests SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test( encontrarCadena.parseSee /home/laura/Documents/GitHub/RoboCup-Equipo2/tests/runTests [==[--gtest_filter=encontrarCadena.parseSee]==] --gtest_also_run_disabled_tests)
+set_tests_properties( encontrarCadena.parseSee PROPERTIES WORKING_DIRECTORY /home/laura/Documents/GitHub/RoboCup-Equipo2/tests SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+add_test( comprobarKickOff.comprobarSaque /home/laura/Documents/GitHub/RoboCup-Equipo2/tests/runTests [==[--gtest_filter=comprobarKickOff.comprobarSaque]==] --gtest_also_run_disabled_tests)
+set_tests_properties( comprobarKickOff.comprobarSaque PROPERTIES WORKING_DIRECTORY /home/laura/Documents/GitHub/RoboCup-Equipo2/tests SKIP_REGULAR_EXPRESSION [==[\[  SKIPPED \]]==])
+set( runTests_TESTS encontrarCadena.errorMensajeSeeParsed encontrarCadena.parseSee comprobarKickOff.comprobarSaque)
