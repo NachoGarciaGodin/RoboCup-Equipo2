@@ -17,10 +17,9 @@ using namespace std;
 
 
 const vector<pair<int, int>> posicionesIniciales = {
-    {-51, 0}, {-30, -30}, {-35, -10}, {-35, 10}, {-30, 30}, 
+    {-51, 0}, {-30, -30}, {-35, -10}, {-35, 10}, {-30, 30},
     {-25, -10}, {-25, 10}, {-11, 0}, {-2, -27}, {-2, 27}, {-0.75, -10}, {-1, 0}
 };
-
 
 vector<string> quitarParentesis(const string & cadena){
   vector<string> groups;
@@ -73,13 +72,13 @@ vector<string> dividir_en_palabras(const string& cadena) {
 }
 
 void encontrarCadena(string const & mensajeInicial, Jugador & jugador) {
-    int posSee=mensajeInicial.find("see",0);
 
+    int posSee=mensajeInicial.find("see",0);
     if (posSee != -1){
         int posBall = mensajeInicial.find("(b)",posSee);
         int posFlagPorteria=-1;
         if (posBall != -1){
-            string aux = mensajeInicial.substr(posBall+4,8); 
+            string aux = mensajeInicial.substr(posBall+4,8);
             jugador.distanciaAlBalon = distancia(aux);
             jugador.orientacionAlBalon = orientacion(aux);
         }
@@ -87,12 +86,11 @@ void encontrarCadena(string const & mensajeInicial, Jugador & jugador) {
             posFlagPorteria= mensajeInicial.find("(g l)",posSee);
         else
             posFlagPorteria= mensajeInicial.find("(g r)",posSee);
-        if (posFlagPorteria != -1){  
-            string aux2 = mensajeInicial.substr(posFlagPorteria+5,11); 
+        if (posFlagPorteria != -1){
+            string aux2 = mensajeInicial.substr(posFlagPorteria+5,11);
             jugador.distanciaPorteria = distancia(aux2);
             jugador.orientacionPorteria = orientacion(aux2);
         }
-
     }
 }
 
@@ -101,7 +99,7 @@ float distancia(string const &  mensajeRecibido){ // revisar decimales, no los c
     auto mensaje = mensajeRecibido;
     if(mensajeRecibido.find(")",0)!=-1)
         mensaje.erase(mensajeRecibido.find(")",0));
-  
+
     vector<string> palabras = dividir_en_palabras(mensaje);
     distancia=stof(palabras.at(0));
 
@@ -113,7 +111,7 @@ float orientacion(string const & mensajeRecibido){
     auto mensaje = mensajeRecibido;
     if(mensajeRecibido.find(")",0)!=-1)
         mensaje.erase(mensajeRecibido.find(")",0));
-  
+
     vector<string> palabras = dividir_en_palabras(mensaje);
     orientacion=stof(palabras.at(1));
 
@@ -161,13 +159,12 @@ string orientarJugador(string const & gradosAOrientarse){
 
 }
 
-
-void colocarJugadorSegunNumero(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
-    if(jugador.numero == 11 && jugador.equipo == "l")
+void colocarJugadorSegunNumero(Jugador jugador, string const & auxKickOff ,MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
+    if((jugador.numero == 11) && (jugador.equipo == auxKickOff))
         socket.sendTo(colocarJugador(posicionesIniciales.at(jugador.numero).first, posicionesIniciales.at(jugador.numero).second),address);
     else{
         socket.sendTo(colocarJugador(posicionesIniciales.at(jugador.numero - 1).first, posicionesIniciales.at(jugador.numero - 1).second),address);
-       
+
     }
 }
 
@@ -177,13 +174,12 @@ void girarEquipoVisitante(MinimalSocket::udp::Udp<true> & socket, MinimalSocket:
 }
 
 
-
 void iniciarJugador(string const & mensajeInicial, Jugador & jugador){
 
     auto parsedMsg = quitarParentesis(mensajeInicial).at(0);
     auto doubleParsedMsg = dividir_en_palabras(parsedMsg);
 
-    
+
     jugador.equipo = doubleParsedMsg.at(1);
     jugador.numero = stoi(doubleParsedMsg.at(2));
     if( (jugador.numero>1) && (jugador.numero <6))
@@ -195,7 +191,6 @@ void iniciarJugador(string const & mensajeInicial, Jugador & jugador){
     else
         jugador.tipoJugador = 0;
 }
-
 
 
 void decidirComando(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
@@ -213,7 +208,7 @@ void decidirComando(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Min
                 PelotaenManos=1;
             }
             break;
-        case 1: 
+        case 1:
             if((jugador.orientacionAlBalon > 20))
                 socket.sendTo(orientarJugador("10"), address);
             else if(jugador.orientacionAlBalon < -20)
@@ -248,7 +243,7 @@ void decidirComando(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Min
                 socket.sendTo(orientarJugador("-10"), address);
             else if(jugador.distanciaAlBalon < 0.6)
                 socket.sendTo(golpearBalon("20", to_string(jugador.orientacionPorteria)), address);
-            else{ 
+            else{
                 float velocidad = (jugador.distanciaAlBalon * 100) / velocidadBase ;
                 if (velocidad < velocidadBase)
                     velocidad = velocidadBase;
@@ -256,18 +251,45 @@ void decidirComando(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Min
             }
             break;
     }
+    jugador.distanciaAlBalon=50;
+    jugador.orientacionAlBalon=50;
 }
 
-
-bool comprobarKickOff (const string & mensaje, string & ladoKickOff){ // (hear 0 referee kick_off_l)) 
+bool comprobarKickOff (const string & mensaje, string & ladoKickOff, Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){ // (hear 0 referee kick_off_l))  play-mode to kick_in, corner_kick, or goal_kick.
         auto parsedMsg = quitarParentesis(mensaje).at(0);
         auto doubleParsedMsg = dividir_en_palabras(parsedMsg);
-
+        string auxKickOff;
         if (doubleParsedMsg.size() == 4) {
             if (doubleParsedMsg.at(3) == "kick_off_l" || doubleParsedMsg.at(3) == "kick_off_r"){
                 ladoKickOff = doubleParsedMsg.at(3);
                 return true;
+            }else if((doubleParsedMsg.at(3)== "half_time") || (doubleParsedMsg.at(3)== "time_over")){
+                if (ladoKickOff == "kick_off_l"){
+                    auxKickOff= "l";
+                }
+                else if(ladoKickOff == "kick_off_r"){
+                    auxKickOff= "r";
+                }
+                auxKickOff= "r";
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                colocarJugadorSegunNumero(jugador, auxKickOff, socket, address);
+                // std::size_t message_max_size = 1000;
+                // auto mensajeAux = socket.receive(message_max_size);
+                if((jugador.equipo == "r") && (jugador.numero != 1) ){ //
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                    girarEquipoVisitante(socket, address);
+                }
+                return false;
             }
-                
+            // else if (doubleParsedMsg.at(3) == "kick_in_l" && doubleParsedMsg.at(3) == "kick_in_r"){ //saque de banda
+            //     if(ladoKickOff == "kick_in_l")
+                    
+            // }
+            //else if (doubleParsedMsg.at(3) == "corner_kick"){ //corner
+
+            // }else if (doubleParsedMsg.at(3) == "goal_kick"){ //penalti
+
+            // }
         }
+        return true;
 }

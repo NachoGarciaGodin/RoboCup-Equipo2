@@ -15,7 +15,7 @@ vector<string> dividir_en_palabras(const string & );
 
 string colocarJugador(string const &, string const &);
 
-void colocarJugadorSegunNumero(Jugador, MinimalSocket::udp::Udp<true> &,
+void colocarJugadorSegunNumero(Jugador, string const & ,MinimalSocket::udp::Udp<true> &,
                             MinimalSocket::Address const &);
 
 
@@ -35,6 +35,7 @@ void encontrarCadena(string const &, Jugador &);
 float orientacion(string const &);
 
 float distancia(string const & );
-bool comprobarKickOff (const string &, string &);
+
+bool comprobarKickOff (const string &, string &, Jugador &, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address);
 
 #endif // FUNCIONALIDAD_H
