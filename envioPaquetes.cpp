@@ -2,24 +2,24 @@
 
 #include "envioPaquetes.h"
 #include "funcionalidad.h"
-
+#include <MinimalSocket/udp/UdpSocket.h>
 using namespace std;
 
 
 const vector<pair<int, int>> posicionesIniciales = {
     {-51, 0}, {-30, -30}, {-35, -10}, {-35, 10}, {-30, 30}, 
-    {-25, -10}, {-25, 10}, {-11, 0}, {-2, -27}, {-2, 27}, {-0.75, -10}, {-1, 0}
+    {-25, -10}, {-25, 10}, {-11, 0}, {-2, -27}, {-2, 27}, {-1, 0}, {-1, -10}
 };
 
 
-void colocarJugadorSegunNumero(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
-    if(jugador.numero == 11 && jugador.equipo == "l")
-        socket.sendTo(colocarJugador(posicionesIniciales.at(jugador.numero).first, posicionesIniciales.at(jugador.numero).second),address);
-    else{
-        socket.sendTo(colocarJugador(posicionesIniciales.at(jugador.numero - 1).first, posicionesIniciales.at(jugador.numero - 1).second),address);
-       
+void colocarJugadorSegunNumero(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, const MinimalSocket::Address & address) {
+    if (jugador.numero == 11 && jugador.equipo == "l") {
+        socket.sendTo(colocarJugador(to_string(posicionesIniciales.at(jugador.numero).first), to_string(posicionesIniciales.at(jugador.numero).second)), address);
+    } else {
+        socket.sendTo(colocarJugador(to_string(posicionesIniciales.at(jugador.numero - 1).first), to_string(posicionesIniciales.at(jugador.numero - 1).second)), address);
     }
 }
+
 
 void girarEquipoVisitante(MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address)
 {

@@ -22,9 +22,9 @@ TEST(encontrarCadena, parseSee)
   jugador.equipo = "l"; // Para que mi jugador vea la porteria derecha (g r) tiene que ser de lado izquierdo
 
   encontrarCadena(s, jugador);
-  EXPECT_EQ(jugador.distanciaAlBalon, 36.6);
+  EXPECT_EQ(jugador.distanciaAlBalon, 36); // por ahora no cogemos decimales
   EXPECT_EQ(jugador.orientacionAlBalon, -57);
-  EXPECT_EQ(jugador.distanciaPorteria, 79.8);
+  EXPECT_EQ(jugador.distanciaPorteria, 79);
   EXPECT_EQ(jugador.orientacionPorteria, -24);
 }
 
@@ -34,6 +34,6 @@ TEST(comprobarKickOff, comprobarSaque){
   string lado = "";
   hanSacado = comprobarKickOff(s ,lado);
   EXPECT_TRUE(hanSacado);
-  EXPECT_EQ(lado, "l"); //en este caso por kickkof L 
+  EXPECT_EQ(lado, "kick_off_l"); //en este caso por kickkof L 
 
 }

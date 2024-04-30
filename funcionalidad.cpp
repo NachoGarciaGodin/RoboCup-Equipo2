@@ -9,9 +9,6 @@
 #include <string>
 #include <thread>
 
-#include <MinimalSocket/udp/UdpSocket.h>
-#include "envioPaquetes.h"
-
 using namespace std;
 
 
@@ -116,13 +113,13 @@ float orientacion(string const & mensajeRecibido){
 }
 
 
-string colocarJugador(int const & posx, int const & posy){
+string colocarJugador(string const & posx, string const & posy){
 
     string msgEnvio {"(move "};
 
-    msgEnvio.append(to_string(posx));
+    msgEnvio.append(posx);
     msgEnvio.append(" ");
-    msgEnvio.append(to_string(posy));
+    msgEnvio.append(posy);
     msgEnvio.append(")");
 
 
