@@ -23,7 +23,11 @@ void iniciarJugador(string const &, Jugador &);
 
 string orientarJugador(string const & );
 
-void encontrarCadena(string const &, Jugador &);
+
+void parseSeverMessage(const string &, Jugador &);
+
+
+void parseSee(string const &, Jugador &);
 
 float orientacion(string const &);
 

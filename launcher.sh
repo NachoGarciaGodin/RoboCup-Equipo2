@@ -9,21 +9,21 @@ if [ $? -eq 0 ]; then
 
     # Itera 11 veces
         #/home/nacho/Escritorio/RoboCup-Equipo2/player NottighamMiedo goalie &
-         /home/laura/Documents/GitHub/RoboCup-Equipo2/player NottighamMiedo goalie &
+         /home/danie/Documents/GitHub/RoboCup-Equipo2/player NottighamMiedo goalie &
     
     for i in {1..10}
     do
         # Lanza el archivo /player en una nueva terminal
         sleep 1.5
         #/home/nacho/Escritorio/RoboCup-Equipo2/player  NottighamMiedo j &
-        /home/laura/Documents/GitHub/RoboCup-Equipo2/player NottighamMiedo j &
+        /home/danie/Documents/GitHub/RoboCup-Equipo2/player NottighamMiedo j &
     done
 
     sleep 1.5
 
     # Itera 11 veces
         #/home/nacho/Escritorio/RoboCup-Equipo2/player LosCojos goalie &
-        /home/laura/Documents/GitHub/RoboCup-Equipo2/player LosCojos goalie &
+        /home/danie/Documents/GitHub/RoboCup-Equipo2/player LosCojos goalie &
         
     
     for i in {1..10}
@@ -31,7 +31,7 @@ if [ $? -eq 0 ]; then
         # Lanza el archivo /player en una nueva terminal
         sleep 1.5
         #/home/nacho/Escritorio/RoboCup-Equipo2/player LosCojos j &
-        /home/laura/Documents/GitHub/RoboCup-Equipo2/player LosCojos j &
+        /home/danie/Documents/GitHub/RoboCup-Equipo2/player LosCojos j &
     done
 
 else

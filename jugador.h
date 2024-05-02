@@ -39,6 +39,8 @@ public:
     float orientacionPorteria;
     float distanciaPorteria;
 
+
+
 };
 
 

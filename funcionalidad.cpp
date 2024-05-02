@@ -45,6 +45,43 @@ vector<string> quitarParentesis(const string & cadena){
   return groups;
 }
 
+
+
+vector<string> dividir_en_palabras_parentesis(string const &s) {
+    vector<string> palabras;
+    string palabra;
+    char token1 = '(';
+    int count_parentesis = 0;
+    char token2 = ')';
+
+    for (int i = 0; i < s.length(); i++) {
+        if (s.at(i) == token1) {
+            count_parentesis++;
+            if (count_parentesis > 1)
+                palabra.push_back(s.at(i));
+        } else if (s.at(i) == token2) {
+            count_parentesis--;
+            if (count_parentesis > 0)
+                palabra.push_back(s.at(i));
+        } else if (s.at(i) == ' ') {
+            if (count_parentesis == 0 && !palabra.empty()) {
+                palabras.push_back(palabra);
+                palabra.clear();
+            } else {
+                palabra.push_back(s.at(i));
+            }
+        } else {
+            palabra.push_back(s.at(i));
+        }
+    }
+
+    if (!palabra.empty()) {
+        palabras.push_back(palabra);
+    }
+
+    return palabras;
+}
+
 vector<string> dividir_en_palabras(const string& cadena) {
     vector<string> palabras;
     string palabra_actual;
@@ -64,9 +101,37 @@ vector<string> dividir_en_palabras(const string& cadena) {
     return palabras;
 }
 
-void encontrarCadena(string const & mensajeInicial, Jugador & jugador) {
-    int posSee=mensajeInicial.find("see",0);
 
+void parseSeverMessage(const string &message, Jugador & jugador)
+  {
+    auto messages = dividir_en_palabras_parentesis(message);
+
+    for (const string & m : messages) {
+        if (m.substr(0, 3) == "see") {
+            parseSee(m, jugador);
+
+        } else if (m.substr(0, 10) == "sense_body") {
+           // parseSenseBody(m, jugador);
+        } else if (m.substr(0, 4) == "hear") {
+            //jugador = parseHearMessage(m, jugador);
+        } else if (m.substr(0, 16) == "change_player_type" || m.substr(0, 2) == "ok") {
+            // TODO
+        } else if (m.substr(0, 11) == "player_type") {
+            // TODO
+        } else if (m.substr(0, 12) == "player_param") {
+            // TODO
+        } else {
+            //cout << "Message not recognized:\n=====================================\n " << m << endl;
+        }
+    }
+    return ;
+  }
+
+  
+
+void parseSee(string const & mensajeInicial, Jugador & jugador) {
+    int posSee=mensajeInicial.find("see",0);
+   
     if (posSee != -1){
         int posBall = mensajeInicial.find("(b)",posSee);
         int posFlagPorteria=-1;
@@ -87,6 +152,7 @@ void encontrarCadena(string const & mensajeInicial, Jugador & jugador) {
 
     }
 }
+
 
 float distancia(string const &  mensajeRecibido){ // revisar decimales, no los coge
     int distancia=0;
