@@ -109,8 +109,6 @@ int main(int argc, char *argv[] )
         parseSeverMessage(received_message_content, jugador);
         decidirComando(jugador, udp_socket, server_udp);
     }  
-
-      
     
 }
 }
