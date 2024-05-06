@@ -11,7 +11,7 @@ using namespace std;
 
 const vector<pair<int, int>> posicionesIniciales = {
     {-51, 0}, {-30, -30}, {-35, -10}, {-35, 10}, {-30, 30}, 
-    {-25, -10}, {-25, 10}, {-11, 0}, {-2, -27}, {-2, 27}, {-1, 0}, {-2, -0}
+    {-25, -10}, {-25, 10}, {-11, 0}, {-2, -27}, {-2, 27}, {-1, 0}, {-2, 0}
 };
 
 void girarEquipoVisitante(MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address)
@@ -24,7 +24,6 @@ void colocarJugadorSegunNumero(Jugador jugador, string const & auxKickOff ,Minim
         socket.sendTo(colocarJugador(to_string(posicionesIniciales.at(jugador.numero).first), to_string(posicionesIniciales.at(jugador.numero).second)), address);
     else{
         socket.sendTo(colocarJugador(to_string(posicionesIniciales.at(jugador.numero - 1).first), to_string(posicionesIniciales.at(jugador.numero - 1).second)), address);
-
     }
 }
 

@@ -27,6 +27,8 @@ public:
     float orientacionPorteria;
     float distanciaPorteria;
 
+
+
 };
 
 #endif // JUGADOR_H
