@@ -32,6 +32,6 @@ void parseSee(string const &, Jugador &);
 float orientacion(string const &);
 
 float distancia(string const & );
-bool comprobarKickOff (const string &, string &);
+
 
 #endif // FUNCIONALIDAD_H

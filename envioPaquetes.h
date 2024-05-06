@@ -2,6 +2,8 @@
 #define ENVIO_PAQUETES_H
 
 #include "jugador.h"
+#include "envioPaquetes.h"
+#include "funcionalidad.h"
 
 #include <iostream>
 #include <vector>
@@ -13,9 +15,12 @@ void girarEquipoVisitante(MinimalSocket::udp::Udp<true> &, MinimalSocket::Addres
 
 void decidirComando(Jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const &);
 
+void colocarJugadorSegunNumero(Jugador, string const & ,MinimalSocket::udp::Udp<true> &, MinimalSocket::Address const &);
 
-void colocarJugadorSegunNumero(Jugador, MinimalSocket::udp::Udp<true> &,
-                            MinimalSocket::Address const &);
+bool comprobarKickOff (const string & , string & , Jugador & , MinimalSocket::udp::Udp<true> & , MinimalSocket::Address const & );
+
+void decidirComando(Jugador jugador, MinimalSocket::udp::Udp<true> & , MinimalSocket::Address const & );
+
 
 
 #endif //ENVIO_PAQUETES_H

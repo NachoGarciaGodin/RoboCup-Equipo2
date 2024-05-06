@@ -10,24 +10,12 @@ public:
     struct Posicion {
         int posX;
         int posY;
-    };
-
-    struct PorteriaContraria {
-        float orientacion;
-        float distancia;
-    };
-
-    struct PosicionBalon {
-        float distancia;
-        float orientacion;
-    };
-    
+    };    
 
     Jugador(){}
 
     // Destructor
     ~Jugador() {}
-
 
     // Atributos privados
     int numero;
@@ -42,7 +30,5 @@ public:
 
 
 };
-
-
 
 #endif // JUGADOR_H
