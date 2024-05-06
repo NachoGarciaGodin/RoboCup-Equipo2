@@ -97,7 +97,7 @@ int main(int argc, char *argv[] )
         int posHear=0;
         posHear=received_message_content.find("hear",0);
         if (posHear != -1){
-            kickOff=comprobarKickOff(received_message_content, quienSaca);
+            kickOff=comprobarKickOff(received_message_content, quienSaca,jugador, udp_socket, server_udp);
         }
     }
     if( kickOff == 1){
