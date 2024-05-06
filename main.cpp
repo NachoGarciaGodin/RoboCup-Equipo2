@@ -28,7 +28,7 @@ int main(int argc, char *argv[] )
         return 1;
     }
     srand(time(NULL));
-    MinimalSocket::Port this_socket_port = rand() % (10000-5000+1) + 5000;
+    MinimalSocket::Port this_socket_port = rand() % (7001 - 6000) + 6000;
 
     //cout << "Creating a UDP socket" << endl;
 

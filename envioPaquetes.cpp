@@ -11,7 +11,7 @@ using namespace std;
 
 const vector<pair<int, int>> posicionesIniciales = {
     {-51, 0}, {-30, -30}, {-35, -10}, {-35, 10}, {-30, 30}, 
-    {-25, -10}, {-25, 10}, {-11, 0}, {-2, -27}, {-2, 27}, {-1, 0}, {-1, -10}
+    {-25, -10}, {-25, 10}, {-11, 0}, {-2, -27}, {-2, 27}, {-1, 0}, {-2, -0}
 };
 
 void girarEquipoVisitante(MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address)
