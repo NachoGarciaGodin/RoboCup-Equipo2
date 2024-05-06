@@ -28,7 +28,7 @@ int main(int argc, char *argv[] )
         return 1;
     }
     srand(time(NULL));
-    MinimalSocket::Port this_socket_port = rand() % (10000-5000+1) + 5000;
+    MinimalSocket::Port this_socket_port = rand() % (7001 - 6000) + 6000;
 
     //cout << "Creating a UDP socket" << endl;
 
@@ -49,7 +49,6 @@ int main(int argc, char *argv[] )
     string nombre_equipo=argv[1];
     if(argv[2]=="goalie"){
         udp_socket.sendTo("(init "+nombre_equipo+"(version 19)(goalie))", other_recipient_udp);
-        cout << "Message sent" << endl;
     }else{
         udp_socket.sendTo("(init "+nombre_equipo+"(version 19))", other_recipient_udp);
     }
@@ -67,8 +66,8 @@ int main(int argc, char *argv[] )
 
     std::string received_message_content = received_message->received_message;
 
-
-    colocarJugadorSegunNumero(jugador, udp_socket, server_udp);   
+    string auxiliar= "l";
+    colocarJugadorSegunNumero(jugador, auxiliar,udp_socket, server_udp);   
 
     received_message = udp_socket.receive(message_max_size);
     
@@ -91,7 +90,6 @@ int main(int argc, char *argv[] )
     MinimalSocket::Address other_sender_udp = received_message->sender;
     
     std::string received_message_content = received_message->received_message;
-    //cout << received_message_content << endl;
 
     int posSee=0;
     posSee=received_message_content.find("see",0);
@@ -99,17 +97,15 @@ int main(int argc, char *argv[] )
         encontrarCadena(received_message_content, jugador);
     }
 
-    if(kickOff==0){ //para que sólo se ejecute una vez
-        int posHear=0;
-        posHear=received_message_content.find("hear",0);
-        if (posHear != -1){
-            kickOff=comprobarKickOff(received_message_content, quienSaca);
-        }
+    int posHear=0;
+    posHear=received_message_content.find("hear",0);
+    if (posHear != -1){
+        kickOff=comprobarKickOff(received_message_content, quienSaca, jugador, udp_socket, server_udp);
     }
+
     if( (kickOff==1)){ // 
         decidirComando(jugador, udp_socket, server_udp);
-    }
-    
+    }    
     
 }//fin del while
 }

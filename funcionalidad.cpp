@@ -65,13 +65,13 @@ vector<string> dividir_en_palabras(const string& cadena) {
 }
 
 void encontrarCadena(string const & mensajeInicial, Jugador & jugador) {
-    int posSee=mensajeInicial.find("see",0);
 
+    int posSee=mensajeInicial.find("see",0);
     if (posSee != -1){
         int posBall = mensajeInicial.find("(b)",posSee);
         int posFlagPorteria=-1;
         if (posBall != -1){
-            string aux = mensajeInicial.substr(posBall+4,8); 
+            string aux = mensajeInicial.substr(posBall+4,8);
             jugador.distanciaAlBalon = distancia(aux);
             jugador.orientacionAlBalon = orientacion(aux);
         }
@@ -79,12 +79,11 @@ void encontrarCadena(string const & mensajeInicial, Jugador & jugador) {
             posFlagPorteria= mensajeInicial.find("(g l)",posSee);
         else
             posFlagPorteria= mensajeInicial.find("(g r)",posSee);
-        if (posFlagPorteria != -1){  
-            string aux2 = mensajeInicial.substr(posFlagPorteria+5,11); 
+        if (posFlagPorteria != -1){
+            string aux2 = mensajeInicial.substr(posFlagPorteria+5,11);
             jugador.distanciaPorteria = distancia(aux2);
             jugador.orientacionPorteria = orientacion(aux2);
         }
-
     }
 }
 
@@ -93,7 +92,7 @@ float distancia(string const &  mensajeRecibido){ // revisar decimales, no los c
     auto mensaje = mensajeRecibido;
     if(mensajeRecibido.find(")",0)!=-1)
         mensaje.erase(mensajeRecibido.find(")",0));
-  
+
     vector<string> palabras = dividir_en_palabras(mensaje);
     distancia=stof(palabras.at(0));
 
@@ -105,7 +104,7 @@ float orientacion(string const & mensajeRecibido){
     auto mensaje = mensajeRecibido;
     if(mensajeRecibido.find(")",0)!=-1)
         mensaje.erase(mensajeRecibido.find(")",0));
-  
+
     vector<string> palabras = dividir_en_palabras(mensaje);
     orientacion=stof(palabras.at(1));
 
@@ -155,13 +154,12 @@ string orientarJugador(string const & gradosAOrientarse){
 
 
 
-
 void iniciarJugador(string const & mensajeInicial, Jugador & jugador){
 
     auto parsedMsg = quitarParentesis(mensajeInicial).at(0);
     auto doubleParsedMsg = dividir_en_palabras(parsedMsg);
 
-    
+
     jugador.equipo = doubleParsedMsg.at(1);
     jugador.numero = stoi(doubleParsedMsg.at(2));
     if( (jugador.numero>1) && (jugador.numero <6))
@@ -174,18 +172,3 @@ void iniciarJugador(string const & mensajeInicial, Jugador & jugador){
         jugador.tipoJugador = 0;
 }
 
-
-
-
-bool comprobarKickOff (const string & mensaje, string & ladoKickOff){ // (hear 0 referee kick_off_l)) 
-        auto parsedMsg = quitarParentesis(mensaje).at(0);
-        auto doubleParsedMsg = dividir_en_palabras(parsedMsg);
-
-        if (doubleParsedMsg.size() == 4) {
-            if (doubleParsedMsg.at(3) == "kick_off_l" || doubleParsedMsg.at(3) == "kick_off_r"){
-                ladoKickOff = doubleParsedMsg.at(3);
-                return true;
-            }
-                
-        }
-}
