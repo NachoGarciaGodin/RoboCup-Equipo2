@@ -26,6 +26,8 @@ public:
     float distanciaAlBalon = 3;
     float orientacionPorteria;
     float distanciaPorteria;
+    bool colocarse=false;
+    bool KickOff=false;
 
 
 

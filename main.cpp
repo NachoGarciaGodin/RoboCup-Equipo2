@@ -66,8 +66,9 @@ int main(int argc, char *argv[] )
 
     std::string received_message_content = received_message->received_message;
 
-    string auxiliar= "l";
-    colocarJugadorSegunNumero(jugador, auxiliar,udp_socket, server_udp);   
+    if((jugador.equipo == "l") && (jugador.numero==11))
+        jugador.KickOff=true;
+    colocarJugadorSegunNumero(jugador,udp_socket, server_udp);   
 
     received_message = udp_socket.receive(message_max_size);
     
@@ -104,6 +105,7 @@ int main(int argc, char *argv[] )
     }
     
     if(kickOff == 1){
+        jugador.KickOff=false;
         parseSeverMessage(received_message_content, jugador);
         decidirComando(jugador, udp_socket, server_udp);
     }  
