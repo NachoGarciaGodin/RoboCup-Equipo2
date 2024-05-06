@@ -9,17 +9,10 @@
 #include <string>
 #include <thread>
 
-#include <MinimalSocket/udp/UdpSocket.h>
-
-
 using namespace std;
 
 
 
-const vector<pair<int, int>> posicionesIniciales = {
-    {-51, 0}, {-30, -30}, {-35, -10}, {-35, 10}, {-30, 30},
-    {-25, -10}, {-25, 10}, {-11, 0}, {-2, -27}, {-2, 27}, {-0.75, -10}, {-1, 0}
-};
 
 vector<string> quitarParentesis(const string & cadena){
   vector<string> groups;
@@ -119,13 +112,13 @@ float orientacion(string const & mensajeRecibido){
 }
 
 
-string colocarJugador(int const & posx, int const & posy){
+string colocarJugador(string const & posx, string const & posy){
 
     string msgEnvio {"(move "};
 
-    msgEnvio.append(to_string(posx));
+    msgEnvio.append(posx);
     msgEnvio.append(" ");
-    msgEnvio.append(to_string(posy));
+    msgEnvio.append(posy);
     msgEnvio.append(")");
 
 
@@ -159,19 +152,6 @@ string orientarJugador(string const & gradosAOrientarse){
 
 }
 
-void colocarJugadorSegunNumero(Jugador jugador, string const & auxKickOff ,MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
-    if((jugador.numero == 11) && (jugador.equipo == auxKickOff))
-        socket.sendTo(colocarJugador(posicionesIniciales.at(jugador.numero).first, posicionesIniciales.at(jugador.numero).second),address);
-    else{
-        socket.sendTo(colocarJugador(posicionesIniciales.at(jugador.numero - 1).first, posicionesIniciales.at(jugador.numero - 1).second),address);
-
-    }
-}
-
-void girarEquipoVisitante(MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address)
-{
-    socket.sendTo("(turn 180)", address);
-}
 
 
 void iniciarJugador(string const & mensajeInicial, Jugador & jugador){
@@ -273,8 +253,6 @@ bool comprobarKickOff (const string & mensaje, string & ladoKickOff, Jugador & j
                 auxKickOff= "r";
                 std::this_thread::sleep_for(std::chrono::milliseconds(1000));
                 colocarJugadorSegunNumero(jugador, auxKickOff, socket, address);
-                // std::size_t message_max_size = 1000;
-                // auto mensajeAux = socket.receive(message_max_size);
                 if((jugador.equipo == "r") && (jugador.numero != 1) ){ //
                     std::this_thread::sleep_for(std::chrono::milliseconds(1000));
                     girarEquipoVisitante(socket, address);
