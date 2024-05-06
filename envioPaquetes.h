@@ -13,13 +13,11 @@ using namespace std;
 
 void girarEquipoVisitante(MinimalSocket::udp::Udp<true> &, MinimalSocket::Address const &);
 
-void decidirComando(Jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const &);
+void decidirComando(Jugador &, MinimalSocket::udp::Udp<true> &, MinimalSocket::Address const &);
 
 void colocarJugadorSegunNumero(Jugador, string const & ,MinimalSocket::udp::Udp<true> &, MinimalSocket::Address const &);
 
 bool comprobarKickOff (const string & , string & , Jugador & , MinimalSocket::udp::Udp<true> & , MinimalSocket::Address const & );
-
-void decidirComando(Jugador jugador, MinimalSocket::udp::Udp<true> & , MinimalSocket::Address const & );
 
 
 

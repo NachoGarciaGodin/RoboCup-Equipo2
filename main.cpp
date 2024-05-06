@@ -91,19 +91,24 @@ int main(int argc, char *argv[] )
     
     std::string received_message_content = received_message->received_message;
 
-    
-
-    if(kickOff==0){ 
-        int posHear=0;
-        posHear=received_message_content.find("hear",0);
-        if (posHear != -1){
-            kickOff=comprobarKickOff(received_message_content, quienSaca,jugador, udp_socket, server_udp);
-        }
+    int posHear=0;
+    posHear=received_message_content.find("hear",0);
+    if (posHear != -1){
+        kickOff=comprobarKickOff(received_message_content, quienSaca,jugador, udp_socket, server_udp);
     }
-    if( kickOff == 1){
+    
+    if((received_message_content.find("(see)")==-1) && (clock.toc()>1000)){
+        jugador.distanciaAlBalon=50;
+        jugador.orientacionAlBalon=50;
+        clock.tic();
+    }
+    
+    if(kickOff == 1){
         parseSeverMessage(received_message_content, jugador);
         decidirComando(jugador, udp_socket, server_udp);
-    }    
+    }  
+
+      
     
 }
 }

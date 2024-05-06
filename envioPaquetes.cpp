@@ -28,8 +28,6 @@ void colocarJugadorSegunNumero(Jugador jugador, string const & auxKickOff ,Minim
 }
 
 
-
-
 bool comprobarKickOff (const string & mensaje, string & ladoKickOff, Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){ // (hear 0 referee kick_off_l))  play-mode to kick_in, corner_kick, or goal_kick.
         auto parsedMsg = quitarParentesis(mensaje).at(0);
         auto doubleParsedMsg = dividir_en_palabras(parsedMsg);
@@ -54,6 +52,14 @@ bool comprobarKickOff (const string & mensaje, string & ladoKickOff, Jugador & j
                 }
                 return false;
             }
+            if (doubleParsedMsg.at(3).find("goal") != -1){ 
+                colocarJugadorSegunNumero(jugador, auxKickOff, socket, address);
+                if((jugador.equipo == "r") && (jugador.numero != 1) ){ 
+                    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+                    girarEquipoVisitante(socket, address);
+                }
+                std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+            }
             // else if (doubleParsedMsg.at(3) == "kick_in_l" && doubleParsedMsg.at(3) == "kick_in_r"){ //saque de banda
             //     if(ladoKickOff == "kick_in_l")
                     
@@ -68,7 +74,7 @@ bool comprobarKickOff (const string & mensaje, string & ladoKickOff, Jugador & j
 }
 
 
-void decidirComando(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
+void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
 
     const float velocidadBase = 20;
     bool PelotaenManos=0;
@@ -126,6 +132,4 @@ void decidirComando(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Min
             }
             break;
     }
-    jugador.distanciaAlBalon=50;
-    jugador.orientacionAlBalon=50;
 }
