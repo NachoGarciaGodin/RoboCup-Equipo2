@@ -29,6 +29,5 @@ float orientacion(string const &);
 
 float distancia(string const & );
 
-bool comprobarKickOff (const string &, string &, Jugador &, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address);
 
 #endif // FUNCIONALIDAD_H

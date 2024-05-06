@@ -49,7 +49,6 @@ int main(int argc, char *argv[] )
     string nombre_equipo=argv[1];
     if(argv[2]=="goalie"){
         udp_socket.sendTo("(init "+nombre_equipo+"(version 19)(goalie))", other_recipient_udp);
-        cout << "Message sent" << endl;
     }else{
         udp_socket.sendTo("(init "+nombre_equipo+"(version 19))", other_recipient_udp);
     }
@@ -101,7 +100,6 @@ int main(int argc, char *argv[] )
     int posHear=0;
     posHear=received_message_content.find("hear",0);
     if (posHear != -1){
-        cout <<  received_message_content  << endl;
         kickOff=comprobarKickOff(received_message_content, quienSaca, jugador, udp_socket, server_udp);
     }
 
