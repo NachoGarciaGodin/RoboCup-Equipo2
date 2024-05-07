@@ -27,7 +27,6 @@ void colocarJugadorSegunNumero(Jugador jugador ,MinimalSocket::udp::Udp<true> & 
     }
 }
 
-
 bool comprobarKickOff (const string & mensaje, string & ladoKickOff, Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){ // (hear 0 referee kick_off_l))  play-mode to kick_in, corner_kick, or goal_kick.
         auto parsedMsg = quitarParentesis(mensaje).at(0);
         auto doubleParsedMsg = dividir_en_palabras(parsedMsg);
@@ -57,9 +56,9 @@ bool comprobarKickOff (const string & mensaje, string & ladoKickOff, Jugador & j
                 return false;
             }
             if (doubleParsedMsg.at(3).find("goal") != -1){ 
-                if((doubleParsedMsg.at(3).find("_l")) && (jugador.numero==11) && (jugador.equipo == "r"))
+                if(((doubleParsedMsg.at(3).find("_l")) != -1 ) && (jugador.numero==11) && (jugador.equipo == "r"))
                     jugador.KickOff=true;
-                if((doubleParsedMsg.at(3).find("_r")) && (jugador.numero==11) && (jugador.equipo == "l"))
+                if(((doubleParsedMsg.at(3).find("_r")) != -1) && (jugador.numero==11) && (jugador.equipo == "l"))
                     jugador.KickOff=true;
                 jugador.colocarse=true;
             }
@@ -81,7 +80,8 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
     static bool aux=0;
     const float velocidadBase = 20;
     bool PelotaenManos=0;
-    if ((jugador.colocarse=false) && (aux==0)){
+
+    if ((jugador.colocarse==false) && (aux==0)){
         switch(jugador.tipoJugador){
             case 0:
                 if(PelotaenManos==1){
@@ -137,12 +137,18 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
                 break;
         }
     }else if(aux==1){
+        if(jugador.numero==11){
+            cout << "Quiero girar" << endl;
+        }
         aux=0;
         if((jugador.equipo == "r") && (jugador.numero != 1) ){ 
             //std::this_thread::sleep_for(std::chrono::milliseconds(1000));
             girarEquipoVisitante(socket, address);
         }
     }else if(jugador.colocarse==true){
+        if(jugador.numero==11){
+            cout << "Me quiero colocar" << endl;
+        }
         colocarJugadorSegunNumero(jugador, socket, address);
         jugador.colocarse=false;
         aux=1;
