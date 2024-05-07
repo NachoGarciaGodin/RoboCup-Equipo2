@@ -128,8 +128,6 @@ void parseSeverMessage(const string &message, Jugador & jugador)
   }
 
 void parseHearMessage(string const & mensajeRecibido, Jugador & jugador) {
-    
-    cout << "He recibido un hear" << mensajeRecibido << endl;
 
     if(mensajeRecibido.find("kick_off") != -1){
         comprobarKickOff(mensajeRecibido, jugador);
@@ -155,11 +153,9 @@ void parseHearMessage(string const & mensajeRecibido, Jugador & jugador) {
 
 void comprobarKickOff(string const & mensajeRecibido, Jugador & jugador){
     auto doubleParsedMsg = dividir_en_palabras(mensajeRecibido);
-    cout << "Dentro de comprobarKickOff" << endl;
-    if (doubleParsedMsg.at(3) == "kick_off_l" || doubleParsedMsg.at(3) == "kick_off_r" ){
+    if (doubleParsedMsg.at(3).compare("kick_of_l") || doubleParsedMsg.at(3).compare("kick_off_r") ){
         jugador.estadoPartido.kickOff = true;
         jugador.estadoPartido.enJuego = true;
-        cout << "KickOff" << endl;
     }
 
 }
@@ -168,12 +164,12 @@ void mediaParte(string const & mensajeRecibido, Jugador & jugador){
 
     auto doubleParsedMsg = dividir_en_palabras(mensajeRecibido);
     string  auxKickOff;
-    if (doubleParsedMsg.at(3) == "kick_off_l"){
+    if (doubleParsedMsg.at(3).compare("kick_off_l")){
         auxKickOff= "l";
         if((jugador.numero==11) && (jugador.equipo == "l"))
             jugador.estadoPartido.kickOff = true;
     }
-    else if(doubleParsedMsg.at(3) == "kick_off_r"){
+    else if(doubleParsedMsg.at(3).compare("kick_off_r")){
         auxKickOff= "r";
         if((jugador.numero==11) && (jugador.equipo == "r"))
             jugador.estadoPartido.kickOff = true;

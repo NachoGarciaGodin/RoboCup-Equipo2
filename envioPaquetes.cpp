@@ -33,10 +33,6 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
     const float velocidadBase = 20;
     static bool PelotaenManos=0;
 
-    cout << "EnJuego: " << jugador.estadoPartido.enJuego << endl;
-    cout << "Colocarse: " << jugador.colocarse << endl;
-    cout << "Aux: " << aux << endl;
-
     if((jugador.colocarse == false) && (aux == 0) ){ //&& (jugador.EnJuego==true)
         switch(jugador.tipoJugador){
             case 0:

@@ -98,12 +98,10 @@ int main(int argc, char *argv[] )
 
 
     parseSeverMessage(received_message_content, jugador);
-    cout << "estado : " << jugador.estadoPartido.enJuego << endl;
+    
     if(jugador.estadoPartido.enJuego ){
         decidirComando(jugador, udp_socket, server_udp);
     }  
-    
-    
     
     }
 }
