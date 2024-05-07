@@ -32,7 +32,7 @@ bool comprobarKickOff (const string & mensaje, string & ladoKickOff, Jugador & j
         auto doubleParsedMsg = dividir_en_palabras(parsedMsg);
         string auxKickOff;
         if (doubleParsedMsg.size() == 4) {
-            if (doubleParsedMsg.at(3) == "kick_off_l" || doubleParsedMsg.at(3) == "kick_off_r"){
+            if (doubleParsedMsg.at(3) == "kick_off_l" || doubleParsedMsg.at(3) == "kick_off_r" ){ //|| doubleParsedMsg.at(3) == "play_on"
                 ladoKickOff = doubleParsedMsg.at(3);
                 return true;
             }else if((doubleParsedMsg.at(3)== "half_time") || (doubleParsedMsg.at(3)== "time_over")){
@@ -55,12 +55,13 @@ bool comprobarKickOff (const string & mensaje, string & ladoKickOff, Jugador & j
                 }
                 return false;
             }
-            if (doubleParsedMsg.at(3).find("goal") != -1){ 
+            if (doubleParsedMsg.at(3).find("goal_") != -1){ 
                 if(((doubleParsedMsg.at(3).find("_l")) != -1 ) && (jugador.numero==11) && (jugador.equipo == "r"))
                     jugador.KickOff=true;
                 if(((doubleParsedMsg.at(3).find("_r")) != -1) && (jugador.numero==11) && (jugador.equipo == "l"))
                     jugador.KickOff=true;
                 jugador.colocarse=true;
+                jugador.EnJuego=false;
             }
             // else if (doubleParsedMsg.at(3) == "kick_in_l" && doubleParsedMsg.at(3) == "kick_in_r"){ //saque de banda
             //     if(ladoKickOff == "kick_in_l")
@@ -81,7 +82,7 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
     const float velocidadBase = 20;
     bool PelotaenManos=0;
 
-    if ((jugador.colocarse==false) && (aux==0)){
+    if((jugador.colocarse==false) && (aux==0) ){ //&& (jugador.EnJuego==true)
         switch(jugador.tipoJugador){
             case 0:
                 if(PelotaenManos==1){
@@ -136,19 +137,16 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
                 }
                 break;
         }
-    }else if(aux==1){
-        if(jugador.numero==11){
-            cout << "Quiero girar" << endl;
-        }
+    }else if((aux==1) ){ //&& (jugador.EnJuego==false)
         aux=0;
-        if((jugador.equipo == "r") && (jugador.numero != 1) ){ 
-            //std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-            girarEquipoVisitante(socket, address);
+        if(jugador.numero != 1){ 
+            std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            socket.sendTo("(turn "+to_string(jugador.orientacionAlBalon)+")", address);
+            jugador.EnJuego=false;
+            std::this_thread::sleep_for(std::chrono::milliseconds(4000));
         }
-    }else if(jugador.colocarse==true){
-        if(jugador.numero==11){
-            cout << "Me quiero colocar" << endl;
-        }
+    }else if((jugador.colocarse==true) ){
+        std::this_thread::sleep_for(std::chrono::milliseconds(150));
         colocarJugadorSegunNumero(jugador, socket, address);
         jugador.colocarse=false;
         aux=1;

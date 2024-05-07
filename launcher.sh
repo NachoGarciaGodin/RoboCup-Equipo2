@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Compila el programa usando make
+make clean
 make
 
 # Verifica si make se ejecutó correctamente

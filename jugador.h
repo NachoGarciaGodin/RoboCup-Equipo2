@@ -28,7 +28,7 @@ public:
     float distanciaPorteria;
     bool colocarse=false;
     bool KickOff=false;
-
+    bool EnJuego=false;
 
 
 };
