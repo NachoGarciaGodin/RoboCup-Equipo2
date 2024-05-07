@@ -17,7 +17,6 @@ void decidirComando(Jugador &, MinimalSocket::udp::Udp<true> &, MinimalSocket::A
 
 void colocarJugadorSegunNumero(Jugador, MinimalSocket::udp::Udp<true> &, MinimalSocket::Address const &);
 
-bool comprobarKickOff (const string & , string & , Jugador & , MinimalSocket::udp::Udp<true> & , MinimalSocket::Address const & );
 
 
 

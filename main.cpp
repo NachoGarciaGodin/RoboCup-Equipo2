@@ -20,8 +20,6 @@ using namespace std;
 int main(int argc, char *argv[] )
 {
     Jugador jugador;
-    string quienSaca;
-    bool kickOff=0;
 
     if (argc != 3) {
         cout << "Falta indicar si es goalie" << endl;
@@ -66,26 +64,23 @@ int main(int argc, char *argv[] )
 
     std::string received_message_content = received_message->received_message;
 
-    if((jugador.equipo == "l") && (jugador.numero==11))
-        jugador.KickOff=true;
+
     colocarJugadorSegunNumero(jugador,udp_socket, server_udp);   
 
     received_message = udp_socket.receive(message_max_size);
     
-    if(jugador.equipo == "r" && kickOff==0){ //
+    if(jugador.equipo == "r"){ 
         std::this_thread::sleep_for(std::chrono::milliseconds(150));
         girarEquipoVisitante(udp_socket, server_udp);
     }
 
     TicToc clock;
     clock.tic();
-    jugador.EnJuego=true;
 
     while(1){
 
     std::this_thread::sleep_for(std::chrono::milliseconds(1));
 
-    // receive a message from another udp reaching this one
     std::size_t message_max_size = 1000;
    
     auto received_message = udp_socket.receive(message_max_size);
@@ -94,25 +89,21 @@ int main(int argc, char *argv[] )
     std::string received_message_content = received_message->received_message;
 
     
-    int posHear=0;
-    posHear=received_message_content.find("hear",0);
-    if (posHear != -1){
-        kickOff=comprobarKickOff(received_message_content, quienSaca,jugador, udp_socket, server_udp);
-    }
     
-    if((received_message_content.find("(see)")==-1) && (clock.toc()>1000)){
+    if((received_message_content.find("(see)") == -1) && (clock.toc()>1000)){
         jugador.distanciaAlBalon=50;
         jugador.orientacionAlBalon=50;
         clock.tic();
     }
-    
-    if(kickOff == 1){
-        jugador.KickOff=false;
-        parseSeverMessage(received_message_content, jugador);
+
+
+    parseSeverMessage(received_message_content, jugador);
+    cout << "estado : " << jugador.estadoPartido.enJuego << endl;
+    if(jugador.estadoPartido.enJuego ){
         decidirComando(jugador, udp_socket, server_udp);
     }  
     
     
     
-}
+    }
 }

@@ -33,5 +33,13 @@ float orientacion(string const &);
 
 float distancia(string const & );
 
+void parseHearMessage(string const & , Jugador & ) ;
+
+void mediaParte(string const &, Jugador & );
+
+void hearGol(string const & , Jugador & );
+
+void comprobarKickOff(string const & , Jugador & );
+
 
 #endif // FUNCIONALIDAD_H

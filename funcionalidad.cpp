@@ -113,7 +113,7 @@ void parseSeverMessage(const string &message, Jugador & jugador)
         } else if (m.substr(0, 10) == "sense_body") {
            // parseSenseBody(m, jugador);
         } else if (m.substr(0, 4) == "hear") {
-            //jugador = parseHearMessage(m, jugador);
+            parseHearMessage(m, jugador);
         } else if (m.substr(0, 16) == "change_player_type" || m.substr(0, 2) == "ok") {
             // TODO
         } else if (m.substr(0, 11) == "player_type") {
@@ -126,6 +126,78 @@ void parseSeverMessage(const string &message, Jugador & jugador)
     }
     return ;
   }
+
+void parseHearMessage(string const & mensajeRecibido, Jugador & jugador) {
+    
+    cout << "He recibido un hear" << mensajeRecibido << endl;
+
+    if(mensajeRecibido.find("kick_off") != -1){
+        comprobarKickOff(mensajeRecibido, jugador);
+    }
+    else if(mensajeRecibido.find("half_time") != -1 || mensajeRecibido.find("time_over") != -1)
+    {
+        mediaParte(mensajeRecibido, jugador);
+    }
+    if (mensajeRecibido.find("goal_") != -1){ 
+        hearGol(mensajeRecibido, jugador);
+    }
+    // else if (doubleParsedMsg.at(3) == "kick_in_l" && doubleParsedMsg.at(3) == "kick_in_r"){ //saque de banda
+    //     if(ladoKickOff == "kick_in_l")
+            
+    // }
+    //else if (doubleParsedMsg.at(3) == "corner_kick"){ //corner
+
+    // }else if (doubleParsedMsg.at(3) == "goal_kick"){ //penalti
+
+    // }
+        
+}
+
+void comprobarKickOff(string const & mensajeRecibido, Jugador & jugador){
+    auto doubleParsedMsg = dividir_en_palabras(mensajeRecibido);
+    cout << "Dentro de comprobarKickOff" << endl;
+    if (doubleParsedMsg.at(3) == "kick_off_l" || doubleParsedMsg.at(3) == "kick_off_r" ){
+        jugador.estadoPartido.kickOff = true;
+        jugador.estadoPartido.enJuego = true;
+        cout << "KickOff" << endl;
+    }
+
+}
+
+void mediaParte(string const & mensajeRecibido, Jugador & jugador){
+
+    auto doubleParsedMsg = dividir_en_palabras(mensajeRecibido);
+    string  auxKickOff;
+    if (doubleParsedMsg.at(3) == "kick_off_l"){
+        auxKickOff= "l";
+        if((jugador.numero==11) && (jugador.equipo == "l"))
+            jugador.estadoPartido.kickOff = true;
+    }
+    else if(doubleParsedMsg.at(3) == "kick_off_r"){
+        auxKickOff= "r";
+        if((jugador.numero==11) && (jugador.equipo == "r"))
+            jugador.estadoPartido.kickOff = true;
+    }
+    auxKickOff= "r";
+    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+    //colocarJugadorSegunNumero(jugador, socket, address);
+    if((jugador.equipo == "r") && (jugador.numero != 1) ){ 
+        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+      //  girarEquipoVisitante(socket, address);
+    }
+}
+
+void hearGol(string const & mensajeRecibido, Jugador & jugador){
+    auto doubleParsedMsg = dividir_en_palabras(mensajeRecibido);
+    if (doubleParsedMsg.at(3).find("goal_") != -1){ 
+        if(((doubleParsedMsg.at(3).find("_l")) != -1 ) && (jugador.numero==11) && (jugador.equipo == "r"))
+            jugador.estadoPartido.kickOff = true;
+        if(((doubleParsedMsg.at(3).find("_r")) != -1) && (jugador.numero==11) && (jugador.equipo == "l"))
+            jugador.estadoPartido.kickOff = true;
+        jugador.colocarse=true;
+        jugador.estadoPartido.enJuego = false;
+    }
+}
 
   
 

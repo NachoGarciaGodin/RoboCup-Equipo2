@@ -5,12 +5,19 @@
 
 using namespace std;
 
+struct EstadoPartido {
+    bool enJuego = false;
+    bool kickOff = false;
+    bool colocarse = false;
+};
+
 class Jugador {
 public:
     struct Posicion {
         int posX;
         int posY;
     };    
+
 
     Jugador(){}
 
@@ -26,9 +33,8 @@ public:
     float distanciaAlBalon = 3;
     float orientacionPorteria;
     float distanciaPorteria;
-    bool colocarse=false;
-    bool KickOff=false;
-    bool EnJuego=false;
+    bool colocarse = false;
+    EstadoPartido estadoPartido;
 
 
 };
