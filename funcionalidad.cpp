@@ -149,6 +149,19 @@ void parseSee(string const & mensajeInicial, Jugador & jugador) {
             jugador.distanciaPorteria = distancia(aux2);
             jugador.orientacionPorteria = orientacion(aux2);
         }
+        int posseePlayer = mensajeInicial.find("((p",posSee);
+        if(posseePlayer != -1){
+            int posFinalgo = mensajeInicial.find(") ",posseePlayer);
+            if(posFinalgo != -1){
+                jugador.distanciaPase=distancia(mensajeInicial.substr(posFinalgo+2,8));
+                jugador.orientacionPase=orientacion(mensajeInicial.substr(posFinalgo+2,8));
+                if((jugador.distanciaPorteria>15) && (jugador.distanciaPase<15))
+                    if(jugador.numero==11){
+                    cout << "Quiero pasar: " << endl;
+                    }
+                    jugador.hayPase=true;
+            }
+        }
     }
 }
 

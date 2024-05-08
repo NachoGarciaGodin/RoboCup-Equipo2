@@ -29,6 +29,9 @@ public:
     bool colocarse=false;
     bool KickOff=false;
     bool EnJuego=false;
+    bool hayPase=false;
+    float orientacionPase;
+    float distanciaPase;
 
 
 };
