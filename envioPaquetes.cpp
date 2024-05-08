@@ -108,7 +108,7 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
                 else if((jugador.distanciaAlBalon < 0.6) && (jugador.hayPase==false))
                     socket.sendTo(golpearBalon("60", to_string(jugador.orientacionPorteria)), address);
                 else if((jugador.hayPase) && (jugador.distanciaAlBalon<0.6)){
-                    socket.sendTo(golpearBalon("20", to_string(jugador.orientacionPase)), address);
+                    socket.sendTo(golpearBalon("10", to_string(jugador.orientacionPase)), address);
                     jugador.hayPase=false;
                 }
                 break;
@@ -126,7 +126,7 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
                 else if((jugador.distanciaAlBalon < 0.6) && (jugador.hayPase==false))
                     socket.sendTo(golpearBalon("60", to_string(jugador.orientacionPorteria)), address);
                 else if((jugador.hayPase) && (jugador.distanciaAlBalon<0.6)){
-                    socket.sendTo(golpearBalon("20", to_string(jugador.orientacionPase)), address);
+                    socket.sendTo(golpearBalon("10", to_string(jugador.orientacionPase)), address);
                     jugador.hayPase=false;
                 }
                 break;
