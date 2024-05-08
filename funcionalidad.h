@@ -41,6 +41,5 @@ void hearGol(string const & , Jugador & );
 
 void comprobarKickOff(string const & , Jugador & );
 
-void limpiarJugador(Jugador & jugador);
 
 #endif // FUNCIONALIDAD_H

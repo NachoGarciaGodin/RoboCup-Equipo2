@@ -30,7 +30,7 @@ void colocarJugadorSegunNumero(Jugador jugador ,MinimalSocket::udp::Udp<true> & 
 
 void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
     static bool aux=0;
-    const float velocidad = 50;
+    const float velocidadBase = 20;
     static bool PelotaenManos=0;
 
     if((jugador.colocarse == false) && (aux == 0) ){ //&& (jugador.EnJuego==true)
@@ -43,8 +43,7 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
                 else if(jugador.distanciaAlBalon < 2){
                     socket.sendTo("(catch " + to_string(jugador.orientacionAlBalon) + ")", address);
                     PelotaenManos=1;
-                }else if((jugador.orientacionAlBalon > 20))
-                    socket.sendTo(orientarJugador("10"), address);
+                }
                 break;
             case 1:
                 if((jugador.orientacionAlBalon > 20))
@@ -82,11 +81,14 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
                 else if(jugador.distanciaAlBalon < 0.6)
                     socket.sendTo(golpearBalon("20", to_string(jugador.orientacionPorteria)), address);
                 else{
+                    float velocidad = (jugador.distanciaAlBalon * 100) / velocidadBase ;
+                    if (velocidad < velocidadBase)
+                        velocidad = velocidadBase;
                     socket.sendTo("(dash " + to_string(velocidad) + ")", address);
                 }
                 break;
         }
-    }else if((aux==1) ){ 
+    }else if((aux==1) ){ //&& (jugador.EnJuego==false)
         aux=0;
         if(jugador.numero != 1){ 
             std::this_thread::sleep_for(std::chrono::milliseconds(150));
@@ -99,7 +101,4 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
         jugador.colocarse=false;
         aux=1;
     }
-
-    
 }
-

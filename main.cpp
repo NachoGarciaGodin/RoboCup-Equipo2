@@ -77,26 +77,30 @@ int main(int argc, char *argv[] )
     TicToc clock;
     clock.tic();
 
-    while (true){
+    while(1){
 
-    do{
-        received_message = udp_socket.receive(message_max_size);
-        received_message_content = received_message->received_message;
+    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+
+    std::size_t message_max_size = 1000;
+   
+    auto received_message = udp_socket.receive(message_max_size);
+    MinimalSocket::Address other_sender_udp = received_message->sender;
     
-        try
-        {
-            parseSeverMessage(received_message_content, jugador);
-        }
-        catch (const std::exception &e)
-        {
-            cout << e.what() << endl;
-        }
-    } while (received_message_content.find("(see") == -1);
+    std::string received_message_content = received_message->received_message;
 
+    
+    
+    if((received_message_content.find("(see)") == -1) && (clock.toc()>1000)){
+        jugador.distanciaAlBalon=50;
+        jugador.orientacionAlBalon=50;
+        clock.tic();
+    }
+
+
+    parseSeverMessage(received_message_content, jugador);
     
     if(jugador.estadoPartido.enJuego ){
         decidirComando(jugador, udp_socket, server_udp);
-        limpiarJugador(jugador);
     }  
     
     }

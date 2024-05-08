@@ -306,7 +306,3 @@ void iniciarJugador(string const & mensajeInicial, Jugador & jugador){
         jugador.tipoJugador = 0;
 }
 
-void limpiarJugador(Jugador & jugador){
-    jugador.distanciaAlBalon = 50;
-    jugador.orientacionAlBalon = 50;
-}
