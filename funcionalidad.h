@@ -16,8 +16,6 @@ string colocarJugador(string const &, string const &);
 
 
 string golpearBalon(string const &, string const &);
-
-
 void iniciarJugador(string const &, Jugador &);
 
 

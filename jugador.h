@@ -35,6 +35,11 @@ public:
     float distanciaPorteria;
     bool colocarse = false;
     EstadoPartido estadoPartido;
+    bool KickOff=false;
+    bool EnJuego=false;
+    bool hayPase=false;
+    float orientacionPase;
+    float distanciaPase;
 
 
 };
