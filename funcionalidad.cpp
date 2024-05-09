@@ -175,10 +175,8 @@ void mediaParte(string const & mensajeRecibido, Jugador & jugador){
             jugador.estadoPartido.kickOff = true;
     }
     auxKickOff= "r";
-    std::this_thread::sleep_for(std::chrono::milliseconds(1000));
     //colocarJugadorSegunNumero(jugador, socket, address);
     if((jugador.equipo == "r") && (jugador.numero != 1) ){ 
-        std::this_thread::sleep_for(std::chrono::milliseconds(1000));
       //  girarEquipoVisitante(socket, address);
     }
 }
@@ -191,8 +189,9 @@ void hearGol(string const & mensajeRecibido, Jugador & jugador){
         if(((doubleParsedMsg.at(3).find("_r")) != -1) && (jugador.numero==11) && (jugador.equipo == "l"))
             jugador.estadoPartido.kickOff = true;
         jugador.estadoPartido.colocarse = true;
-        jugador.estadoPartido.enJuego = false;
     }
+
+    return;
 }
 
   

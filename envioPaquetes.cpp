@@ -19,7 +19,7 @@ void girarEquipoVisitante(MinimalSocket::udp::Udp<true> & socket, MinimalSocket:
     socket.sendTo("(turn 180)", address);
 }
 
-void colocarJugadorSegunNumero(Jugador jugador ,MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
+void colocarJugadorSegunNumero(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address ){
     if((jugador.numero == 11) && (jugador.estadoPartido.kickOff))
         socket.sendTo(colocarJugador(to_string(posicionesIniciales.at(jugador.numero).first), to_string(posicionesIniciales.at(jugador.numero).second)), address);
     else{
@@ -39,6 +39,10 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
                 if(PelotaenManos){
                     socket.sendTo(golpearBalon("100", to_string(jugador.orientacionPorteria)), address);
                     PelotaenManos=0;
+                }else if((jugador.orientacionAlBalon > 10)){
+                    socket.sendTo(orientarJugador(to_string(jugador.orientacionAlBalon)), address);
+                }else if(jugador.orientacionAlBalon < -10){
+                    socket.sendTo(orientarJugador(to_string(jugador.orientacionAlBalon)), address);
                 }
                 else if(jugador.distanciaAlBalon<2){
                     socket.sendTo("(catch " + to_string(jugador.orientacionAlBalon) + ")", address);
@@ -47,9 +51,9 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
                 break;
             case 1:
                 if((jugador.orientacionAlBalon > 10))
-                    socket.sendTo(orientarJugador("5"), address);
+                    socket.sendTo(orientarJugador(to_string(jugador.orientacionAlBalon)), address);
                 else if(jugador.orientacionAlBalon < -10)
-                    socket.sendTo(orientarJugador("-5"), address);
+                    socket.sendTo(orientarJugador(to_string(jugador.orientacionAlBalon)), address);
                 else if(jugador.distanciaAlBalon > 30)
                     socket.sendTo("(dash " + to_string(30) + ")", address);
                 else if((jugador.distanciaAlBalon < 30) && (jugador.distanciaAlBalon > 5))
@@ -65,9 +69,9 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
                 break;
             case 2:
                 if((jugador.orientacionAlBalon > 10))
-                    socket.sendTo(orientarJugador("5"), address);
+                    socket.sendTo(orientarJugador(to_string(jugador.orientacionAlBalon)), address);
                 else if(jugador.orientacionAlBalon < -10)
-                    socket.sendTo(orientarJugador("-5"), address);
+                    socket.sendTo(orientarJugador(to_string(jugador.orientacionAlBalon)), address);
                 else if(jugador.distanciaAlBalon > 15)
                     socket.sendTo("(dash " + to_string(30) + ")", address);
                 else if((jugador.distanciaAlBalon < 15) && (jugador.distanciaAlBalon > 5))
@@ -83,9 +87,9 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
                 break;
             case 3:
                 if((jugador.orientacionAlBalon > 10))
-                    socket.sendTo(orientarJugador("5"), address);
+                    socket.sendTo(orientarJugador(to_string(jugador.orientacionAlBalon)), address);
                 else if(jugador.orientacionAlBalon < -10)
-                    socket.sendTo(orientarJugador("-5"), address);
+                    socket.sendTo(orientarJugador(to_string(jugador.orientacionAlBalon)), address);
                 else if((jugador.distanciaAlBalon < 0.6) && (jugador.hayPase==false))
                     socket.sendTo(golpearBalon("60", to_string(jugador.orientacionPorteria)), address);
                 else if((jugador.hayPase) && (jugador.distanciaAlBalon<0.6)){
@@ -102,15 +106,16 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
         }
     }else if((aux==1) ){ //&& (jugador.EnJuego==false)
         aux=0;
-        if(jugador.numero != 1){ 
-            std::this_thread::sleep_for(std::chrono::milliseconds(150));
-            socket.sendTo("(turn "+to_string(jugador.orientacionAlBalon)+")", address);
-            jugador.estadoPartido.enJuego = true;
-        }
+        
+        socket.sendTo("(turn "+to_string(jugador.orientacionAlBalon)+")", address);
+        jugador.estadoPartido.enJuego = true;
+        
     }else if((jugador.estadoPartido.colocarse == true) ){
-        std::this_thread::sleep_for(std::chrono::milliseconds(150));
+
+        cout << "colocar jugador - Estado del partido "  << jugador.estadoPartido.enJuego << endl;
         colocarJugadorSegunNumero(jugador, socket, address);
-        jugador.estadoPartido.colocarse=false;
+        jugador.estadoPartido.colocarse = false;
+        jugador.estadoPartido.enJuego = false;
         aux=1;
     }
 }

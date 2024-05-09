@@ -72,10 +72,10 @@ int main(int argc, char *argv[] )
     iniciarJugador(received_message->received_message, jugador);
 
     
-    colocarJugadorSegunNumero(jugador,udp_socket, server_udp);   
+    colocarJugadorSegunNumero(jugador, udp_socket, server_udp);   
 
     if(jugador.equipo == "r"){ 
-        std::this_thread::sleep_for(std::chrono::milliseconds(10));
+        this_thread::sleep_for(chrono::milliseconds(1));
         girarEquipoVisitante(udp_socket, server_udp);
     }
 
@@ -84,20 +84,23 @@ int main(int argc, char *argv[] )
     clock.tic();
     while(1){
         
-        
-        std::this_thread::sleep_for(std::chrono::milliseconds(1));
-        
-        auto received_message = udp_socket.receive(message_max_size);
-        std::string received_message_content = received_message->received_message;
-        
-         if((received_message_content.find("(see)")==-1) && (clock.toc()>1000)){
-        jugador.distanciaAlBalon=50;
-        jugador.orientacionAlBalon=50;
-        clock.tic();
-        }
+    do{
+    received_message = udp_socket.receive(message_max_size);
+    received_message_content = received_message->received_message;
 
+    jugador.distanciaAlBalon=50;
+    jugador.orientacionAlBalon=50;
+
+    try
+    {
         parseSeverMessage(received_message_content, jugador);
-    
+    }
+    catch (const std::exception &e)
+    {
+        cout << e.what() << endl;
+    }
+    } while (received_message_content.find("(see") == -1);
+        
     if(jugador.estadoPartido.enJuego ){
         decidirComando(jugador, udp_socket, server_udp);
     }  

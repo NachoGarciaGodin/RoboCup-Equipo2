@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Compila el programa usando make
-make clean
+#make clean
 make
 
 Puerto=6500
