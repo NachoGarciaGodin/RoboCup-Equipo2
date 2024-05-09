@@ -190,7 +190,7 @@ void hearGol(string const & mensajeRecibido, Jugador & jugador){
             jugador.estadoPartido.kickOff = true;
         if(((doubleParsedMsg.at(3).find("_r")) != -1) && (jugador.numero==11) && (jugador.equipo == "l"))
             jugador.estadoPartido.kickOff = true;
-        jugador.colocarse=true;
+        jugador.estadoPartido.colocarse = true;
         jugador.estadoPartido.enJuego = false;
     }
 }
@@ -223,9 +223,9 @@ void parseSee(string const & mensajeInicial, Jugador & jugador) {
             if(posFinalgo != -1){
                 jugador.distanciaPase=distancia(mensajeInicial.substr(posFinalgo+2,8));
                 jugador.orientacionPase=orientacion(mensajeInicial.substr(posFinalgo+2,8));
-                if((jugador.distanciaPorteria>15) && (jugador.distanciaPase<15))
-                    if(jugador.numero==11){
-                    cout << "Quiero pasar: " << endl;
+                if((jugador.distanciaPorteria > 15) && (jugador.distanciaPase < 15))
+                    if(jugador.numero == 11){
+                    //cout << "Quiero pasar: " << endl;
                     }
                     jugador.hayPase=true;
             }

@@ -33,7 +33,7 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
     const float velocidadBase = 50;
     static bool PelotaenManos=0;
 
-    if((jugador.colocarse == false) && (aux == 0) ){ //&& (jugador.EnJuego==true)
+    if((jugador.estadoPartido.colocarse == false) && (aux == 0) ){ //&& (jugador.EnJuego==true)
         switch(jugador.tipoJugador){
             case 0:
                 if(PelotaenManos){
@@ -107,10 +107,10 @@ void decidirComando(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, M
             socket.sendTo("(turn "+to_string(jugador.orientacionAlBalon)+")", address);
             jugador.estadoPartido.enJuego = true;
         }
-    }else if((jugador.colocarse==true) ){
+    }else if((jugador.estadoPartido.colocarse == true) ){
         std::this_thread::sleep_for(std::chrono::milliseconds(150));
         colocarJugadorSegunNumero(jugador, socket, address);
-        jugador.colocarse=false;
+        jugador.estadoPartido.colocarse=false;
         aux=1;
     }
 }

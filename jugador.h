@@ -13,12 +13,6 @@ struct EstadoPartido {
 
 class Jugador {
 public:
-    struct Posicion {
-        int posX;
-        int posY;
-    };    
-
-
     Jugador(){}
 
     // Destructor
@@ -33,10 +27,7 @@ public:
     float distanciaAlBalon = 3;
     float orientacionPorteria;
     float distanciaPorteria;
-    bool colocarse = false;
     EstadoPartido estadoPartido;
-    bool KickOff=false;
-    bool EnJuego=false;
     bool hayPase=false;
     float orientacionPase;
     float distanciaPase;
