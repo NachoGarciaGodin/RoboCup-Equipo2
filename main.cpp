@@ -19,20 +19,25 @@ using namespace std;
 
 int main(int argc, char *argv[] )
 {
+    TicToc clock;
+    
     Jugador jugador;
+    
 
-    if (argc != 3) {
-        cout << "Falta indicar si es goalie" << endl;
-        return 1;
+
+    clock.tic();
+
+    if (argc != 4)
+    {
+        throw std::invalid_argument("Uso: <nombre_equipo> <tipo_jugador> <puerto>");
     }
-    srand(time(NULL));
-    MinimalSocket::Port this_socket_port = rand() % (7001 - 6000) + 6000;
 
-    //cout << "Creating a UDP socket" << endl;
-
+    string puerto = argv[3];
+    cout << "Puerto: " << puerto << endl;
+    MinimalSocket::Port this_socket_port = stoi(puerto);
+    cout << "Creating a UDP socket" << endl;
     MinimalSocket::udp::Udp<true> udp_socket(this_socket_port, MinimalSocket::AddressFamily::IP_V6);
-
-    //cout << "Socket created" << endl;
+    cout << "Socket created" << endl;
 
     bool success = udp_socket.open();
 
@@ -42,66 +47,61 @@ int main(int argc, char *argv[] )
         return 1;
     }
 
+    
     // send a message to another udp
     MinimalSocket::Address other_recipient_udp = MinimalSocket::Address{"127.0.0.1", 6000};
     string nombre_equipo=argv[1];
     if(argv[2]=="goalie"){
-        udp_socket.sendTo("(init "+nombre_equipo+"(version 19)(goalie))", other_recipient_udp);
+        udp_socket.sendTo("(init "+nombre_equipo+"(version 19) (goalie))", other_recipient_udp);
     }else{
         udp_socket.sendTo("(init "+nombre_equipo+"(version 19))", other_recipient_udp);
     }
-        
-    std::size_t message_max_size = 1000;
-    //cout << "Waiting for a message" << endl;
+
+    cout << "Message sent" << endl;
+
+    std::size_t message_max_size = 5000;
+    cout << "Waiting for a message" << endl;
     auto received_message = udp_socket.receive(message_max_size);
     // check the sender address
     MinimalSocket::Address other_sender_udp = received_message->sender;
-    MinimalSocket::Address server_udp = MinimalSocket::Address{"127.0.0.1", other_sender_udp.getPort()};
 
+    std::string received_message_content = received_message->received_message;
+
+    MinimalSocket::Address server_udp = MinimalSocket::Address{"127.0.0.1", other_sender_udp.getPort()};
+    cout << "Received message: " << received_message_content << endl;
     iniciarJugador(received_message->received_message, jugador);
 
     
-
-    std::string received_message_content = received_message->received_message;
-
-
     colocarJugadorSegunNumero(jugador,udp_socket, server_udp);   
 
-    received_message = udp_socket.receive(message_max_size);
-    
     if(jugador.equipo == "r"){ 
-        std::this_thread::sleep_for(std::chrono::milliseconds(150));
+        std::this_thread::sleep_for(std::chrono::milliseconds(10));
         girarEquipoVisitante(udp_socket, server_udp);
     }
 
-    TicToc clock;
+
+    cout << "Esperando a que empiece el partido" << endl;
     clock.tic();
-
     while(1){
-
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
-
-    std::size_t message_max_size = 1000;
-   
-    auto received_message = udp_socket.receive(message_max_size);
-    MinimalSocket::Address other_sender_udp = received_message->sender;
-    
-    std::string received_message_content = received_message->received_message;
-
-    
-    
-    if((received_message_content.find("(see)") == -1) && (clock.toc()>1000)){
+        
+        
+        std::this_thread::sleep_for(std::chrono::milliseconds(1));
+        
+        auto received_message = udp_socket.receive(message_max_size);
+        std::string received_message_content = received_message->received_message;
+        
+         if((received_message_content.find("(see)")==-1) && (clock.toc()>1000)){
         jugador.distanciaAlBalon=50;
         jugador.orientacionAlBalon=50;
         clock.tic();
-    }
+        }
 
-
-    parseSeverMessage(received_message_content, jugador);
+        parseSeverMessage(received_message_content, jugador);
     
     if(jugador.estadoPartido.enJuego ){
         decidirComando(jugador, udp_socket, server_udp);
     }  
+
     
     }
 }

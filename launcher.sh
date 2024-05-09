@@ -4,35 +4,22 @@
 make clean
 make
 
+Puerto=6500
+
 # Verifica si make se ejecutó correctamente
 if [ $? -eq 0 ]; then
     echo "La compilación fue exitosa. Ejecutando el programa..."
 
-    # Itera 11 veces
-        #/home/nacho/Escritorio/RoboCup-Equipo2/player NottighamMiedo goalie &
-        /home/laura/Documents/GitHub/RoboCup-Equipo2/player NottighamMiedo goalie &
-    
-    for i in {1..10}
-    do
-        # Lanza el archivo /player en una nueva terminal
-        sleep 1.5
-        #/home/nacho/Escritorio/RoboCup-Equipo2/player  NottighamMiedo j &
-        /home/laura/Documents/GitHub/RoboCup-Equipo2/player NottighamMiedo j &
-    done
-
-    sleep 1.5
-
-    # Itera 11 veces
-        #/home/nacho/Escritorio/RoboCup-Equipo2/player LosCojos goalie &
-        /home/laura/Documents/GitHub/RoboCup-Equipo2/player LosCojos goalie &
+    gnome-terminal -- bash -c "./player NottighamMiedo goalie  $Puerto; exec bash" 
+((Puerto++))
+    gnome-terminal -- bash -c "./player LosCojos goalie $Puerto; exec bash" 
         
-    
-    for i in {1..10}
+    for (( i=1; i<=10; i++ ))
     do
-        # Lanza el archivo /player en una nueva terminal
-        sleep 1.5
-        #/home/nacho/Escritorio/RoboCup-Equipo2/player LosCojos j &
-        /home/laura/Documents/GitHub/RoboCup-Equipo2/player LosCojos j &
+        ((Puerto++))
+        gnome-terminal -- bash -c "./player NottighamMiedo j  $Puerto; exec bash" 
+        ((Puerto++))
+        gnome-terminal -- bash -c "./player LosCojos j $Puerto; exec bash" 
     done
 
 else
