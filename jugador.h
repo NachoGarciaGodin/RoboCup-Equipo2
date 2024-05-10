@@ -11,6 +11,18 @@ struct EstadoPartido {
     bool colocarse = false;
 };
 
+struct Flags {
+    float distanciaPorteriaDer;
+    float distanciaPorteriaIzq;
+    float distanciaCornerIzq1;
+    float distanciaCornerIzq2;
+    float distanciaCornerDer1;
+    float distanciaCornerDer2;
+    float distanciaCentroCampo1;
+    float distanciaCentroCampo2;
+    
+};
+
 class Jugador {
 public:
     Jugador(){}

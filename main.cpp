@@ -22,7 +22,7 @@ int main(int argc, char *argv[] )
     TicToc clock;
     
     Jugador jugador;
-    
+    Flags flags;
 
 
     clock.tic();
@@ -93,7 +93,8 @@ int main(int argc, char *argv[] )
 
     try
     {
-        parseSeverMessage(received_message_content, jugador);
+        parseSeverMessage(received_message_content, jugador, flags);
+        
     }
     catch (const std::exception &e)
     {

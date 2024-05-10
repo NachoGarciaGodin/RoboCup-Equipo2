@@ -46,7 +46,6 @@ vector<string> quitarParentesis(const string & cadena){
 }
 
 
-
 vector<string> dividir_en_palabras_parentesis(string const &s) {
     vector<string> palabras;
     string palabra;
@@ -102,14 +101,22 @@ vector<string> dividir_en_palabras(const string& cadena) {
 }
 
 
-void parseSeverMessage(const string &message, Jugador & jugador)
+void parseSeverMessage(const string &message, Jugador & jugador, Flags & flags)
   {
     auto messages = dividir_en_palabras_parentesis(message);
-
+    
     for (const string & m : messages) {
         if (m.substr(0, 3) == "see") {
+            obtenerValoresFlags(m, flags);
+            cout << "Distancia porteria derecha: " << flags.distanciaPorteriaDer << endl;
+            cout << "Distancia porteria izquierda: " << flags.distanciaPorteriaIzq << endl;
+            cout << "Distancia corner derecho 1: " << flags.distanciaCornerDer1 << endl;
+            cout << "Distancia corner derecho 2: " << flags.distanciaCornerDer2 << endl;
+            cout << "Distancia corner izquierdo 1: " << flags.distanciaCornerIzq1 << endl;
+            cout << "Distancia corner izquierdo 2: " << flags.distanciaCornerIzq2 << endl;
+            cout << "Distancia centro campo 1: " << flags.distanciaCentroCampo1 << endl;
+            cout << "Distancia centro campo 2: " << flags.distanciaCentroCampo2 << endl;
             parseSee(m, jugador);
-
         } else if (m.substr(0, 10) == "sense_body") {
            // parseSenseBody(m, jugador);
         } else if (m.substr(0, 4) == "hear") {
@@ -126,6 +133,72 @@ void parseSeverMessage(const string &message, Jugador & jugador)
     }
     return ;
   }
+
+void obtenerValoresFlags(const string &mensaje, Flags & flag) {
+    vector<string> palabras = dividir_en_palabras_parentesis(mensaje);
+    vector<string> resultado;
+    for (const string &palabra : palabras) {
+        if (palabra == "see" || palabra == "0") {
+            cout << "No hay nada que ver" << endl;
+        }
+        else if(palabra.find("(g r") != string::npos) {
+            resultado = sacarValoresFlags(palabra);
+            flag.distanciaPorteriaDer = stof(resultado.at(0));
+        }
+        else if(palabra.find("(g l") != string::npos) {
+            resultado = sacarValoresFlags(palabra);
+            flag.distanciaPorteriaIzq = stof(resultado.at(0));
+        }
+        else if(palabra.find("(f r t") != string::npos) {
+            resultado = sacarValoresFlags(palabra);
+            flag.distanciaCornerDer1 = stof(resultado.at(0));
+        }
+        else if(palabra.find("(f r b") != string::npos) {
+            resultado = sacarValoresFlags(palabra);
+            flag.distanciaCornerDer2 = stof(resultado.at(0));
+        }
+        else if(palabra.find("(f l t") != string::npos) {
+            resultado = sacarValoresFlags(palabra);
+            flag.distanciaCornerIzq1 = stof(resultado.at(0));
+        }
+        else if(palabra.find("(f l b") != string::npos) {
+            resultado = sacarValoresFlags(palabra);
+            flag.distanciaCornerIzq2 = stof(resultado.at(0));
+        }
+        else if(palabra.find("(f t 0") != string::npos) {
+            resultado = sacarValoresFlags(palabra);
+            flag.distanciaCentroCampo1 = stof(resultado.at(0));
+        }
+        else if(palabra.find("(f b 0") != string::npos) {
+            resultado = sacarValoresFlags(palabra);
+            flag.distanciaCentroCampo2 = stof(resultado.at(0));
+        }       
+    }
+}
+
+vector<string> sacarValoresFlags(const string &palabra){
+    vector<std::string> valores_separados{};
+    size_t segundo_parentesis = palabra.find(')');
+    // Extrae los valores que están fuera del paréntesis
+    string valores_fuera_del_parentesis = palabra.substr(segundo_parentesis + 1);
+    // Elimina el espacio en blanco al inicio
+    size_t primer_espacio = valores_fuera_del_parentesis.find(' ');
+    if (primer_espacio != string::npos) {
+        valores_fuera_del_parentesis = valores_fuera_del_parentesis.substr(primer_espacio + 1);
+    }
+    
+    size_t segundo_espacio = valores_fuera_del_parentesis.find(' ');
+    if (segundo_espacio != string::npos) {
+        string primer_valor = valores_fuera_del_parentesis.substr(0, segundo_espacio);
+        valores_separados.push_back(primer_valor);
+
+        // Extraer el segundo valor
+        string segundo_valor = valores_fuera_del_parentesis.substr(segundo_espacio + 1);
+        valores_separados.push_back(segundo_valor);
+    }
+    return valores_separados;
+}
+
 
 void parseHearMessage(string const & mensajeRecibido, Jugador & jugador) {
 
