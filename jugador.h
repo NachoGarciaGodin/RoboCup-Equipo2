@@ -2,6 +2,7 @@
 #define JUGADOR_H
 
 #include <iostream>
+#include <vector>
 
 using namespace std;
 
@@ -24,7 +25,7 @@ struct Flags {
     float distanciaCentroCampo2;
     float distanciaBalon;
     float orientacionBalon;
-    
+    vector<pair<float, float>> pase; //primero distancia segundo orientacion
 };
 
 class Jugador {
@@ -37,6 +38,7 @@ public:
     // Atributos privados
     int numero;
     string equipo;
+    string nombreEquipo;
     float angRotacion;
     int tipoJugador;
     float orientacionAlBalon = 30;

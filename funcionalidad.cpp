@@ -107,15 +107,7 @@ void parseSeverMessage(const string &message, Jugador & jugador, Flags & flags)
     
     for (const string & m : messages) {
         if (m.substr(0, 3) == "see") {
-            obtenerValoresFlags(m, flags);
-            cout << "Distancia porteria derecha: " << flags.distanciaPorteriaDer << endl;
-            cout << "Distancia porteria izquierda: " << flags.distanciaPorteriaIzq << endl;
-            cout << "Distancia corner derecho 1: " << flags.distanciaCornerDer1 << endl;
-            cout << "Distancia corner derecho 2: " << flags.distanciaCornerDer2 << endl;
-            cout << "Distancia corner izquierdo 1: " << flags.distanciaCornerIzq1 << endl;
-            cout << "Distancia corner izquierdo 2: " << flags.distanciaCornerIzq2 << endl;
-            cout << "Distancia centro campo 1: " << flags.distanciaCentroCampo1 << endl;
-            cout << "Distancia centro campo 2: " << flags.distanciaCentroCampo2 << endl;
+            obtenerValoresFlags(jugador, m, flags);
             parseSee(m, jugador);
         } else if (m.substr(0, 10) == "sense_body") {
            // parseSenseBody(m, jugador);
@@ -134,54 +126,79 @@ void parseSeverMessage(const string &message, Jugador & jugador, Flags & flags)
     return ;
   }
 
-void obtenerValoresFlags(const string &mensaje, Flags & flag) {
+void obtenerValoresFlags(Jugador jugador, const string &mensaje, Flags & flag) {
     vector<string> palabras = dividir_en_palabras_parentesis(mensaje);
     vector<string> resultado;
     for (const string &palabra : palabras) {
-        if (palabra == "see" || palabra == "0") {
-            cout << "No hay nada que ver" << endl;
-        }
-        else if(palabra.find("(g r") != string::npos) {
-            resultado = sacarValoresFlags(palabra);
-            flag.distanciaPorteriaDer = stof(resultado.at(0));
-            flag.orientacionPorteriaDer = stof(resultado.at(1));
-        }
-        else if(palabra.find("(g l") != string::npos) {
-            resultado = sacarValoresFlags(palabra);
-            flag.distanciaPorteriaIzq = stof(resultado.at(0));
-            flag.orientacionPorteriaIzq = stof(resultado.at(1));
-        }
-        else if(palabra.find("(f r t") != string::npos) {
-            resultado = sacarValoresFlags(palabra);
-            flag.distanciaCornerDer1 = stof(resultado.at(0));
-        }
-        else if(palabra.find("(f r b") != string::npos) {
-            resultado = sacarValoresFlags(palabra);
-            flag.distanciaCornerDer2 = stof(resultado.at(0));
-        }
-        else if(palabra.find("(f l t") != string::npos) {
-            resultado = sacarValoresFlags(palabra);
-            flag.distanciaCornerIzq1 = stof(resultado.at(0));
-        }
-        else if(palabra.find("(f l b") != string::npos) {
-            resultado = sacarValoresFlags(palabra);
-            flag.distanciaCornerIzq2 = stof(resultado.at(0));
-        }
-        else if(palabra.find("(f t 0") != string::npos) {
-            resultado = sacarValoresFlags(palabra);
-            flag.distanciaCentroCampo1 = stof(resultado.at(0));
-        }
-        else if(palabra.find("(f b 0") != string::npos) {
-            resultado = sacarValoresFlags(palabra);
-            flag.distanciaCentroCampo2 = stof(resultado.at(0));
+        if (palabra != "see" && palabra != "0") {
+            if(palabra.find("(g r") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                flag.distanciaPorteriaDer = stof(resultado.at(0));
+                flag.orientacionPorteriaDer = stof(resultado.at(1));
+            }
+            else if(palabra.find("(g l") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                flag.distanciaPorteriaIzq = stof(resultado.at(0));
+                flag.orientacionPorteriaIzq = stof(resultado.at(1));
+            }
+            else if(palabra.find("(f r t") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                flag.distanciaCornerDer1 = stof(resultado.at(0));
+            }
+            else if(palabra.find("(f r b") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                flag.distanciaCornerDer2 = stof(resultado.at(0));
+            }
+            else if(palabra.find("(f l t") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                flag.distanciaCornerIzq1 = stof(resultado.at(0));
+            }
+            else if(palabra.find("(f l b") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                flag.distanciaCornerIzq2 = stof(resultado.at(0));
+            }
+            else if(palabra.find("(f t 0") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                flag.distanciaCentroCampo1 = stof(resultado.at(0));
+            }
+            else if(palabra.find("(f b 0") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                flag.distanciaCentroCampo2 = stof(resultado.at(0));
+            }    
+            else if(palabra.find("(b") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                flag.distanciaBalon = stof(resultado.at(0));
+                flag.orientacionBalon = stof(resultado.at(1));
+            } 
+            else if(palabra.find("(p") != string::npos) {
+                obtenerValoresPase(jugador, palabra, flag);
+            }  
         }    
-         else if(palabra.find("(b") != string::npos) {
-            resultado = sacarValoresFlags(palabra);
-            flag.distanciaBalon = stof(resultado.at(0));
-            flag.orientacionBalon = stof(resultado.at(1));
-        }      
     }
 }
+
+void obtenerValoresPase(Jugador jugador, const string& palabra, Flags& flag) {
+    vector<string> resultado;
+        if (palabra.find("(p") != string::npos) {
+            resultado = sacarValoresFlags(palabra);
+            // Extraer el nombre del equipo del mensaje
+            size_t inicio_comillas = palabra.find('"');
+            size_t fin_comillas = palabra.find('"', inicio_comillas + 1);
+            string equipo_del_mensaje = palabra.substr(inicio_comillas + 1, fin_comillas - inicio_comillas - 1);
+            cout << "Equipo del mensaje: " << equipo_del_mensaje << "EQUIPO: " << jugador.nombreEquipo << endl;
+            if (jugador.nombreEquipo == equipo_del_mensaje) {
+                // Si hay solo 2 elementos en resultado, significa que el segundo parámetro contiene ambos valores del pase
+                if (resultado.size() == 2) {
+                    flag.pase.push_back(std::make_pair(stof(resultado.at(0)), stof(resultado.at(1))));
+                } else if (resultado.size() > 2) {
+                    // Si hay más de 2 elementos en resultado, solo tomamos los dos primeros como valores del pase
+                    flag.pase.push_back(std::make_pair(stof(resultado.at(0)), stof(resultado.at(1))));
+                }
+            }
+    }
+}
+
+
 
 vector<string> sacarValoresFlags(const string &palabra){
     vector<std::string> valores_separados{};
@@ -286,8 +303,6 @@ void parseSee(string const & mensajeInicial, Jugador & jugador) {
             string aux = mensajeInicial.substr(posBall+4,8);
             jugador.distanciaAlBalon = distancia(aux);
             jugador.orientacionAlBalon = orientacion(aux);
-            cout << "PARSE SEE: Distancia al balon: " << jugador.distanciaAlBalon << endl;
-            cout << "PARSE SEE: Orientacion al balon: " << jugador.orientacionAlBalon << endl;
         }
         if(jugador.equipo=="r")
             posFlagPorteria= mensajeInicial.find("(g l)",posSee);

@@ -39,6 +39,7 @@ void hearGol(string const & , Jugador & );
 
 void comprobarKickOff(string const & , Jugador & );
 void check_flags (Flags &, const string &);
-void obtenerValoresFlags(string const &, Flags &);
+void obtenerValoresFlags(Jugador jugador, string const &, Flags &);
 vector<string> sacarValoresFlags(string const &);
+void obtenerValoresPase(Jugador, const string& , Flags& );
 #endif // FUNCIONALIDAD_H
