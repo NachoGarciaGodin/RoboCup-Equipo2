@@ -20,15 +20,15 @@ using namespace std;
 void mostrarInformacionInternaJugador(Jugador jugador){
     cout << "Numero: " << jugador.numero << endl;
     cout << "Equipo: " << jugador.equipo << endl;
-    cout << "Nombre equipo: " << jugador.nombreEquipo << endl;
+    cout << "Nombre equipo: " << jugador.nombreEquipo << endl << endl;
     cout << "Angulo de rotacion: " << jugador.angRotacion << endl;
-    cout << "Tipo de jugador: " << jugador.tipoJugador << endl;
+    cout << "Tipo de jugador: " << jugador.tipoJugador << endl << endl;
     cout << "Orientacion porteria: " << jugador.orientacionPorteria << endl;
-    cout << "Distancia porteria: " << jugador.distanciaPorteria << endl;
+    cout << "Distancia porteria: " << jugador.distanciaPorteria << endl << endl;
     cout << "Estado del partido: " << endl;
     cout << "En juego: " << jugador.estadoPartido.enJuego << endl;
     cout << "Kick off: " << jugador.estadoPartido.kickOff << endl;
-    cout << "Colocarse: " << jugador.estadoPartido.colocarse << endl;
+    cout << "Colocarse: " << jugador.estadoPartido.colocarse << endl << endl;
     cout << "Flags: " << endl;
     cout << "Distancia porteria derecha: " << jugador.flags.distanciaPorteriaDer << endl;
     cout << "Orientacion porteria derecha: " << jugador.flags.orientacionPorteriaDer << endl;
@@ -41,18 +41,18 @@ void mostrarInformacionInternaJugador(Jugador jugador){
     cout << "Distancia centro campo 1: " << jugador.flags.distanciaCentroCampo1 << endl;
     cout << "Distancia centro campo 2: " << jugador.flags.distanciaCentroCampo2 << endl;
     cout << "Distancia balon: " << jugador.flags.distanciaBalon << endl;
-    cout << "Orientacion balon: " << jugador.flags.orientacionBalon << endl;
+    cout << "Orientacion balon: " << jugador.flags.orientacionBalon << endl << endl;
     cout << "Compañeros cerca: " << endl;
     for (auto &compañero : jugador.flags.compañerosCerca)
     {
         cout << "Distancia: " << compañero.first << " Orientacion: " << compañero.second << endl;
     }
-    cout << "Enemigos cerca: " << endl;
+    cout << endl << "Enemigos cerca: " << endl;
     for (auto &enemigo : jugador.flags.enemigosCerca)
     {
         cout << "Distancia: " << enemigo.first << " Orientacion: " << enemigo.second << endl;
     }
-    cout << "Hay pase: " << jugador.hayPase << endl;
+    cout << endl << "Hay pase: " << jugador.hayPase << endl;
     cout << "Orientacion pase: " << jugador.orientacionPase << endl;
     cout << "Distancia pase: " << jugador.distanciaPase << endl;
     cout << "Siguiente comando: " << jugador.siguienteComando << endl;
@@ -146,7 +146,7 @@ int main(int argc, char *argv[] )
     if(jugador.estadoPartido.enJuego ){
         
         //decidirComando(jugador, udp_socket, server_udp);
-        if(jugador.numero==11 && jugador.nombreEquipo == "NottighamMiedo"){
+        if(jugador.numero==11 && jugador.nombreEquipo == "NottighamMiedo" || jugador.numero == 2 && jugador.nombreEquipo == "NottighamMiedo"){
           mostrarInformacionInternaJugador(jugador);
         }
         arbolDecisiones(jugador, udp_socket, server_udp);

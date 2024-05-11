@@ -109,6 +109,7 @@ void parseSeverMessage(const string &message, Jugador & jugador)
         if (m.substr(0, 3) == "see") {
            // parseSee(m, jugador);
             parseSeeRefactor(m, jugador);
+            obtenerValoresPase(jugador, m);
         } else if (m.substr(0, 10) == "sense_body") {
            // parseSenseBody(m, jugador);
         } else if (m.substr(0, 4) == "hear") {
@@ -126,30 +127,34 @@ void parseSeverMessage(const string &message, Jugador & jugador)
     return ;
   }
 
-void obtenerValoresPase(Jugador jugador, const string& palabra) {
+void obtenerValoresPase(Jugador & jugador, const string& mensaje) {
+    vector<string> palabras = dividir_en_palabras_parentesis(mensaje);
     vector<string> resultado;
     jugador.flags.compañerosCerca.clear();
-    jugador.flags.enemigosCerca.clear(); 
-        if (palabra.find("(p") != string::npos) {
-            resultado = sacarValoresFlags(palabra);
-            // Extraer el nombre del equipo del mensaje
-            size_t inicio_comillas = palabra.find('"');
-            size_t fin_comillas = palabra.find('"', inicio_comillas + 1);
-            string equipo_del_mensaje = palabra.substr(inicio_comillas + 1, fin_comillas - inicio_comillas - 1);
-            if (jugador.nombreEquipo == equipo_del_mensaje) {
-                // Si hay solo 2 elementos en resultado, significa que el segundo parámetro contiene ambos valores del pase
-                if (resultado.size() == 2) {
-                    jugador.flags.compañerosCerca.push_back(make_pair(stof(resultado.at(0)), stof(resultado.at(1))));
-                } else if (resultado.size() > 2) {
-                    // Si hay más de 2 elementos en resultado, solo tomamos los dos primeros como valores del pase
-                    jugador.flags.compañerosCerca.push_back(make_pair(stof(resultado.at(0)), stof(resultado.at(1))));
+    jugador.flags.enemigosCerca.clear();
+    for (const string &palabra : palabras) {
+        if (palabra != "see" && palabra != "0") {
+            if (palabra.find("(p") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                // Extraer el nombre del equipo del mensaje
+                size_t inicio_comillas = palabra.find('"');
+                size_t fin_comillas = palabra.find('"', inicio_comillas + 1);
+                string equipo_del_mensaje = palabra.substr(inicio_comillas + 1, fin_comillas - inicio_comillas - 1);
+                if (jugador.nombreEquipo == equipo_del_mensaje) {
+                    // Si hay solo 2 elementos en resultado, significa que el segundo parámetro contiene ambos valores del pase
+                    if (resultado.size() == 2) {
+                        jugador.flags.compañerosCerca.push_back(make_pair(stof(resultado.at(0)), stof(resultado.at(1))));
+                    } else if (resultado.size() > 2) {
+                        // Si hay más de 2 elementos en resultado, solo tomamos los dos primeros como valores del pase
+                        jugador.flags.compañerosCerca.push_back(make_pair(stof(resultado.at(0)), stof(resultado.at(1))));
+                    }
+                }else if (jugador.nombreEquipo != equipo_del_mensaje) {
+                    jugador.flags.enemigosCerca.push_back(make_pair(stof(resultado.at(0)), stof(resultado.at(1))));
                 }
-            }else{
-                jugador.flags.enemigosCerca.push_back(make_pair(stof(resultado.at(0)), stof(resultado.at(1))));
             }
+        }  
     }
 }
-
 
 
 vector<string> sacarValoresFlags(const string &palabra){
@@ -289,9 +294,10 @@ void hearGol(string const & mensajeRecibido, Jugador & jugador){
                 jugador.flags.distanciaBalon = stof(resultado.at(0));
                 jugador.flags.orientacionBalon = stof(resultado.at(1));
             } 
-            else if(palabra.find("(p") != string::npos) {
-                obtenerValoresPase(jugador, palabra);
-            }  
+            else if(palabra.find("(f l b 20") != string::npos || palabra.find("(f l t 20") != string::npos || palabra.find("(f r b 20") != string::npos || palabra.find("(f r t 20") != string::npos){
+                resultado = sacarValoresFlags(palabra);
+                jugador.flags.flagsFondo.push_back(stof(resultado.at(0)));
+            }
         }    
     }
   }
@@ -405,7 +411,6 @@ void iniciarJugador(string const & mensajeInicial, Jugador & jugador){
 
     auto parsedMsg = quitarParentesis(mensajeInicial).at(0);
     auto doubleParsedMsg = dividir_en_palabras(parsedMsg);
-
 
     jugador.equipo = doubleParsedMsg.at(1);
     jugador.numero = stoi(doubleParsedMsg.at(2));

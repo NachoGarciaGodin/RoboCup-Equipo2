@@ -45,7 +45,7 @@ void parseSeeRefactor(string const & , Jugador &);
 
 vector<string> sacarValoresFlags(string const &);
 
-void obtenerValoresPase(Jugador, const string&);
+void obtenerValoresPase(Jugador &, const string&);
 
 void limpiarDatosJugador(Jugador & jugador);
 

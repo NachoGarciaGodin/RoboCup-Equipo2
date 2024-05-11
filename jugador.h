@@ -27,6 +27,7 @@ struct Flags {
     float orientacionBalon = 30;
     vector<pair<float, float>> compañerosCerca; //primero distancia segundo orientacion
     vector<pair<float, float>> enemigosCerca; //primero distancia segundo orientacion
+    vector<float> flagsFondo;
 };
 
 class Jugador {
