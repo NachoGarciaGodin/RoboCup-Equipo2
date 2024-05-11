@@ -22,7 +22,7 @@ void iniciarJugador(string const &, Jugador &);
 string orientarJugador(string const & );
 
 
-void parseSeverMessage(const string &, Jugador &, Flags &);
+void parseSeverMessage(const string &, Jugador &);
 
 
 void parseSee(string const &, Jugador &);
@@ -38,8 +38,16 @@ void mediaParte(string const &, Jugador & );
 void hearGol(string const & , Jugador & );
 
 void comprobarKickOff(string const & , Jugador & );
+
 void check_flags (Flags &, const string &);
-void obtenerValoresFlags(Jugador jugador, string const &, Flags &);
+
+void parseSeeRefactor(string const & , Jugador &);
+
 vector<string> sacarValoresFlags(string const &);
-void obtenerValoresPase(Jugador, const string& , Flags& );
+
+void obtenerValoresPase(Jugador, const string&);
+
+void limpiarDatosJugador(Jugador & jugador);
+
+
 #endif // FUNCIONALIDAD_H

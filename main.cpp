@@ -17,13 +17,53 @@
 
 using namespace std;
 
+void mostrarInformacionInternaJugador(Jugador jugador){
+    cout << "Numero: " << jugador.numero << endl;
+    cout << "Equipo: " << jugador.equipo << endl;
+    cout << "Nombre equipo: " << jugador.nombreEquipo << endl;
+    cout << "Angulo de rotacion: " << jugador.angRotacion << endl;
+    cout << "Tipo de jugador: " << jugador.tipoJugador << endl;
+    cout << "Orientacion porteria: " << jugador.orientacionPorteria << endl;
+    cout << "Distancia porteria: " << jugador.distanciaPorteria << endl;
+    cout << "Estado del partido: " << endl;
+    cout << "En juego: " << jugador.estadoPartido.enJuego << endl;
+    cout << "Kick off: " << jugador.estadoPartido.kickOff << endl;
+    cout << "Colocarse: " << jugador.estadoPartido.colocarse << endl;
+    cout << "Flags: " << endl;
+    cout << "Distancia porteria derecha: " << jugador.flags.distanciaPorteriaDer << endl;
+    cout << "Orientacion porteria derecha: " << jugador.flags.orientacionPorteriaDer << endl;
+    cout << "Distancia porteria izquierda: " << jugador.flags.distanciaPorteriaIzq << endl;
+    cout << "Orientacion porteria izquierda: " << jugador.flags.orientacionPorteriaIzq << endl;
+    cout << "Distancia corner izquierda 1: " << jugador.flags.distanciaCornerIzq1 << endl;
+    cout << "Distancia corner izquierda 2: " << jugador.flags.distanciaCornerIzq2 << endl;
+    cout << "Distancia corner derecha 1: " << jugador.flags.distanciaCornerDer1 << endl;
+    cout << "Distancia corner derecha 2: " << jugador.flags.distanciaCornerDer2 << endl;
+    cout << "Distancia centro campo 1: " << jugador.flags.distanciaCentroCampo1 << endl;
+    cout << "Distancia centro campo 2: " << jugador.flags.distanciaCentroCampo2 << endl;
+    cout << "Distancia balon: " << jugador.flags.distanciaBalon << endl;
+    cout << "Orientacion balon: " << jugador.flags.orientacionBalon << endl;
+    cout << "Compañeros cerca: " << endl;
+    for (auto &compañero : jugador.flags.compañerosCerca)
+    {
+        cout << "Distancia: " << compañero.first << " Orientacion: " << compañero.second << endl;
+    }
+    cout << "Enemigos cerca: " << endl;
+    for (auto &enemigo : jugador.flags.enemigosCerca)
+    {
+        cout << "Distancia: " << enemigo.first << " Orientacion: " << enemigo.second << endl;
+    }
+    cout << "Hay pase: " << jugador.hayPase << endl;
+    cout << "Orientacion pase: " << jugador.orientacionPase << endl;
+    cout << "Distancia pase: " << jugador.distanciaPase << endl;
+    cout << "Siguiente comando: " << jugador.siguienteComando << endl;
+}
+
+
 int main(int argc, char *argv[] )
 {
     TicToc clock;
     
     Jugador jugador;
-    Flags flags;
-
 
     clock.tic();
 
@@ -88,12 +128,13 @@ int main(int argc, char *argv[] )
     received_message = udp_socket.receive(message_max_size);
     received_message_content = received_message->received_message;
 
-    jugador.distanciaAlBalon=50;
-    jugador.orientacionAlBalon=50;
+    jugador.flags.distanciaBalon=50;
+    jugador.flags.orientacionBalon=50;
+    limpiarDatosJugador(jugador);
 
     try
     {
-        parseSeverMessage(received_message_content, jugador, flags);
+        parseSeverMessage(received_message_content, jugador);
         
     }
     catch (const std::exception &e)
@@ -103,7 +144,12 @@ int main(int argc, char *argv[] )
     } while (received_message_content.find("(see") == -1);
         
     if(jugador.estadoPartido.enJuego ){
-        decidirComando(jugador, udp_socket, server_udp);
+        
+        //decidirComando(jugador, udp_socket, server_udp);
+        if(jugador.numero==11 && jugador.nombreEquipo == "NottighamMiedo"){
+          mostrarInformacionInternaJugador(jugador);
+        }
+        arbolDecisiones(jugador, udp_socket, server_udp);
     }  
 
     
