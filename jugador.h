@@ -13,13 +13,17 @@ struct EstadoPartido {
 
 struct Flags {
     float distanciaPorteriaDer;
+    float orientacionPorteriaDer;
     float distanciaPorteriaIzq;
+    float orientacionPorteriaIzq;
     float distanciaCornerIzq1;
     float distanciaCornerIzq2;
     float distanciaCornerDer1;
     float distanciaCornerDer2;
     float distanciaCentroCampo1;
     float distanciaCentroCampo2;
+    float distanciaBalon;
+    float orientacionBalon;
     
 };
 

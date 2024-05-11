@@ -144,10 +144,12 @@ void obtenerValoresFlags(const string &mensaje, Flags & flag) {
         else if(palabra.find("(g r") != string::npos) {
             resultado = sacarValoresFlags(palabra);
             flag.distanciaPorteriaDer = stof(resultado.at(0));
+            flag.orientacionPorteriaDer = stof(resultado.at(1));
         }
         else if(palabra.find("(g l") != string::npos) {
             resultado = sacarValoresFlags(palabra);
             flag.distanciaPorteriaIzq = stof(resultado.at(0));
+            flag.orientacionPorteriaIzq = stof(resultado.at(1));
         }
         else if(palabra.find("(f r t") != string::npos) {
             resultado = sacarValoresFlags(palabra);
@@ -172,7 +174,12 @@ void obtenerValoresFlags(const string &mensaje, Flags & flag) {
         else if(palabra.find("(f b 0") != string::npos) {
             resultado = sacarValoresFlags(palabra);
             flag.distanciaCentroCampo2 = stof(resultado.at(0));
-        }       
+        }    
+         else if(palabra.find("(b") != string::npos) {
+            resultado = sacarValoresFlags(palabra);
+            flag.distanciaBalon = stof(resultado.at(0));
+            flag.orientacionBalon = stof(resultado.at(1));
+        }      
     }
 }
 
@@ -279,6 +286,8 @@ void parseSee(string const & mensajeInicial, Jugador & jugador) {
             string aux = mensajeInicial.substr(posBall+4,8);
             jugador.distanciaAlBalon = distancia(aux);
             jugador.orientacionAlBalon = orientacion(aux);
+            cout << "PARSE SEE: Distancia al balon: " << jugador.distanciaAlBalon << endl;
+            cout << "PARSE SEE: Orientacion al balon: " << jugador.orientacionAlBalon << endl;
         }
         if(jugador.equipo=="r")
             posFlagPorteria= mensajeInicial.find("(g l)",posSee);
