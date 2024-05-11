@@ -185,7 +185,6 @@ void obtenerValoresPase(Jugador jugador, const string& palabra, Flags& flag) {
             size_t inicio_comillas = palabra.find('"');
             size_t fin_comillas = palabra.find('"', inicio_comillas + 1);
             string equipo_del_mensaje = palabra.substr(inicio_comillas + 1, fin_comillas - inicio_comillas - 1);
-            cout << "Equipo del mensaje: " << equipo_del_mensaje << "EQUIPO: " << jugador.nombreEquipo << endl;
             if (jugador.nombreEquipo == equipo_del_mensaje) {
                 // Si hay solo 2 elementos en resultado, significa que el segundo parámetro contiene ambos valores del pase
                 if (resultado.size() == 2) {
