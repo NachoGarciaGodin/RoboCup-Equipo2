@@ -211,6 +211,8 @@ void comprobarKickOff(string const & mensajeRecibido, Jugador & jugador){
         jugador.estadoPartido.kickOff = true;
         jugador.estadoPartido.enJuego = true;
         cout << "Ha empezado el partido" << endl;
+        if(jugador.numero == 11)
+            jugador.siguienteComando = "(kick 30 180)";
     }
 
 }
@@ -246,6 +248,7 @@ void hearGol(string const & mensajeRecibido, Jugador & jugador){
         if(((doubleParsedMsg.at(3).find("_r")) != -1) && (jugador.numero==11) && (jugador.equipo == "l"))
             jugador.estadoPartido.kickOff = true;
         jugador.estadoPartido.colocarse = true;
+        jugador.estadoPartido.enJuego = false;
     }
 
     return;

@@ -96,7 +96,7 @@ int main(int argc, char *argv[] )
     colocarJugadorSegunNumero(jugador, udp_socket, server_udp);   
 
     if(jugador.equipo == "r"){ 
-        this_thread::sleep_for(chrono::milliseconds(1));
+        this_thread::sleep_for(chrono::milliseconds(100));
         girarEquipoVisitante(udp_socket, server_udp);
     }
 
@@ -122,8 +122,6 @@ int main(int argc, char *argv[] )
     } while (received_message_content.find("(see") == -1);
         
     if(jugador.estadoPartido.enJuego ){
-        if(jugador.numero == 1 && jugador.equipo == "l")
-            mostrarInformacionInternaJugador(jugador);
         arbolDecisiones(jugador, udp_socket, server_udp);
     }  
 
