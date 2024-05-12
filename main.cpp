@@ -20,11 +20,6 @@ using namespace std;
 void mostrarInformacionInternaJugador(Jugador jugador){
     cout << "Numero: " << jugador.numero << endl;
     cout << "Equipo: " << jugador.equipo << endl;
-    cout << "Nombre equipo: " << jugador.nombreEquipo << endl << endl;
-    cout << "Angulo de rotacion: " << jugador.angRotacion << endl;
-    cout << "Tipo de jugador: " << jugador.tipoJugador << endl << endl;
-    cout << "Orientacion porteria: " << jugador.orientacionPorteria << endl;
-    cout << "Distancia porteria: " << jugador.distanciaPorteria << endl << endl;
     cout << "Estado del partido: " << endl;
     cout << "En juego: " << jugador.estadoPartido.enJuego << endl;
     cout << "Kick off: " << jugador.estadoPartido.kickOff << endl;
@@ -42,20 +37,6 @@ void mostrarInformacionInternaJugador(Jugador jugador){
     cout << "Distancia centro campo 2: " << jugador.flags.distanciaCentroCampo2 << endl;
     cout << "Distancia balon: " << jugador.flags.distanciaBalon << endl;
     cout << "Orientacion balon: " << jugador.flags.orientacionBalon << endl << endl;
-    cout << "Compañeros cerca: " << endl;
-    for (auto &compañero : jugador.flags.compañerosCerca)
-    {
-        cout << "Distancia: " << compañero.first << " Orientacion: " << compañero.second << endl;
-    }
-    cout << endl << "Enemigos cerca: " << endl;
-    for (auto &enemigo : jugador.flags.enemigosCerca)
-    {
-        cout << "Distancia: " << enemigo.first << " Orientacion: " << enemigo.second << endl;
-    }
-    cout << endl << "Hay pase: " << jugador.hayPase << endl;
-    cout << "Orientacion pase: " << jugador.orientacionPase << endl;
-    cout << "Distancia pase: " << jugador.distanciaPase << endl;
-    cout << "Siguiente comando: " << jugador.siguienteComando << endl;
 }
 
 
@@ -128,14 +109,11 @@ int main(int argc, char *argv[] )
     received_message = udp_socket.receive(message_max_size);
     received_message_content = received_message->received_message;
 
-    jugador.flags.distanciaBalon=50;
-    jugador.flags.orientacionBalon=50;
     limpiarDatosJugador(jugador);
 
     try
     {
         parseSeverMessage(received_message_content, jugador);
-        
     }
     catch (const std::exception &e)
     {
@@ -144,11 +122,8 @@ int main(int argc, char *argv[] )
     } while (received_message_content.find("(see") == -1);
         
     if(jugador.estadoPartido.enJuego ){
-        
-        //decidirComando(jugador, udp_socket, server_udp);
-        if(jugador.numero==11 && jugador.nombreEquipo == "NottighamMiedo" || jugador.numero == 2 && jugador.nombreEquipo == "NottighamMiedo"){
-          mostrarInformacionInternaJugador(jugador);
-        }
+        if(jugador.numero == 1 && jugador.equipo == "l")
+            mostrarInformacionInternaJugador(jugador);
         arbolDecisiones(jugador, udp_socket, server_udp);
     }  
 

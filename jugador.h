@@ -27,7 +27,12 @@ struct Flags {
     float orientacionBalon = 30;
     vector<pair<float, float>> compañerosCerca; //primero distancia segundo orientacion
     vector<pair<float, float>> enemigosCerca; //primero distancia segundo orientacion
-    vector<float> flagsFondo;
+
+    vector<float> flagsPorteria; //primero distancia segundo orientacion
+   // vector<float> flagsPorteriaIzq; 
+   // vector<float> flagsPorteriaDer; 
+
+
 };
 
 class Jugador {
@@ -41,16 +46,9 @@ public:
     int numero;
     string equipo;
     string nombreEquipo;
-    float angRotacion;
-    int tipoJugador;
    
-    float orientacionPorteria;
-    float distanciaPorteria;
     EstadoPartido estadoPartido;
     Flags flags;
-    bool hayPase=false;
-    float orientacionPase;
-    float distanciaPase;
 
 
     string siguienteComando;

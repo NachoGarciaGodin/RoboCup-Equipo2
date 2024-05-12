@@ -158,7 +158,7 @@ void obtenerValoresPase(Jugador & jugador, const string& mensaje) {
 
 
 vector<string> sacarValoresFlags(const string &palabra){
-    vector<std::string> valores_separados{};
+    vector<string> valores_separados{};
     size_t segundo_parentesis = palabra.find(')');
     // Extrae los valores que están fuera del paréntesis
     string valores_fuera_del_parentesis = palabra.substr(segundo_parentesis + 1);
@@ -210,6 +210,7 @@ void comprobarKickOff(string const & mensajeRecibido, Jugador & jugador){
     if (doubleParsedMsg.at(3).compare("kick_off_l") || doubleParsedMsg.at(3).compare("kick_off_r") ){
         jugador.estadoPartido.kickOff = true;
         jugador.estadoPartido.enJuego = true;
+        cout << "Ha empezado el partido" << endl;
     }
 
 }
@@ -296,7 +297,7 @@ void hearGol(string const & mensajeRecibido, Jugador & jugador){
             } 
             else if(palabra.find("(f l b 20") != string::npos || palabra.find("(f l t 20") != string::npos || palabra.find("(f r b 20") != string::npos || palabra.find("(f r t 20") != string::npos){
                 resultado = sacarValoresFlags(palabra);
-                jugador.flags.flagsFondo.push_back(stof(resultado.at(0)));
+                jugador.flags.flagsPorteria.push_back(stof(resultado.at(0)));
             }
         }    
     }
@@ -400,7 +401,7 @@ string orientarJugador(string const & gradosAOrientarse){
     msgEnvio.append(gradosAOrientarse);
     msgEnvio.append(" )");
 
-
+    
     return msgEnvio;
 
 }
@@ -414,14 +415,6 @@ void iniciarJugador(string const & mensajeInicial, Jugador & jugador){
 
     jugador.equipo = doubleParsedMsg.at(1);
     jugador.numero = stoi(doubleParsedMsg.at(2));
-    if( (jugador.numero>1) && (jugador.numero <6))
-        jugador.tipoJugador = 1;
-    else if((jugador.numero>5) && (jugador.numero <9))
-        jugador.tipoJugador = 2;
-    else if(jugador.numero>8)
-        jugador.tipoJugador = 3;
-    else
-        jugador.tipoJugador = 0;
 }
 
 
@@ -438,5 +431,5 @@ void limpiarDatosJugador(Jugador & jugador){
     jugador.flags.distanciaCentroCampo2 = -9343;
     jugador.flags.distanciaBalon = 3;
     jugador.flags.orientacionBalon = 30;
-    jugador.siguienteComando = "";
+    jugador.siguienteComando.clear();
 }

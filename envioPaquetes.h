@@ -19,6 +19,8 @@ void colocarJugadorSegunNumero(Jugador, MinimalSocket::udp::Udp<true> &, Minimal
 
 void arbolDecisiones(Jugador & , MinimalSocket::udp::Udp<true> & , MinimalSocket::Address const & );
 
+void accionesRepetidas(Jugador & , MinimalSocket::udp::Udp<true> & , MinimalSocket::Address const & );
+
 
 void arbolJugador1(Jugador, MinimalSocket::udp::Udp<true> &, MinimalSocket::Address const &);
 void arbolJugador2(Jugador, MinimalSocket::udp::Udp<true> &, MinimalSocket::Address const &);
