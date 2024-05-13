@@ -23,6 +23,12 @@ struct Flags {
     float distanciaCornerDer2;
     float distanciaCentroCampo1;
     float distanciaCentroCampo2;
+    float distanciaAreaIzqArriba;
+    float distanciaAreaIzqAbajo;
+    float distanciaAreaIzqCentro;
+    float distanciaAreaDerArriba;
+    float distanciaAreaDerAbajo;
+    float distanciaAreaDerCentro;
     float distanciaBalon = 3;
     float orientacionBalon = 30;
     vector<pair<float, float>> compañerosCerca; //primero distancia segundo orientacion

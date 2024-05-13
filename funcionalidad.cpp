@@ -300,6 +300,30 @@ void hearGol(string const & mensajeRecibido, Jugador & jugador){
                 resultado = sacarValoresFlags(palabra);
                 jugador.flags.flagsPorteria.push_back(stof(resultado.at(0)));
             }
+            else if(palabra.find("(p l b") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                jugador.flags.distanciaAreaIzqAbajo = stof(resultado.at(0));
+            }  
+            else if(palabra.find("(p l c") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                jugador.flags.distanciaAreaIzqCentro = stof(resultado.at(0));
+            }  
+            else if(palabra.find("(p l t") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                jugador.flags.distanciaAreaIzqArriba = stof(resultado.at(0));
+            }  
+            else if(palabra.find("(p r b") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                jugador.flags.distanciaAreaDerAbajo = stof(resultado.at(0));
+            }  
+            else if(palabra.find("(p r c") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                jugador.flags.distanciaAreaDerCentro = stof(resultado.at(0));
+            }  
+            else if(palabra.find("(p r t") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                jugador.flags.distanciaAreaDerArriba = stof(resultado.at(0));
+            }  
         }    
     }
   }
