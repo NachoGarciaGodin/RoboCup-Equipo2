@@ -210,6 +210,7 @@ void comprobarKickOff(string const & mensajeRecibido, Jugador & jugador){
     if (doubleParsedMsg.at(3).compare("kick_off_l") || doubleParsedMsg.at(3).compare("kick_off_r") ){
         jugador.estadoPartido.kickOff = true;
         jugador.estadoPartido.enJuego = true;
+        jugador.estadoPartido.colocarse = false;
         cout << "Ha empezado el partido" << endl;
         if(jugador.numero == 11)
             jugador.siguienteComando = "(kick 30 180)";

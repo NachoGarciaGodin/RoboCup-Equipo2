@@ -121,7 +121,7 @@ int main(int argc, char *argv[] )
     }
     } while (received_message_content.find("(see") == -1);
         
-    if(jugador.estadoPartido.enJuego ){
+    if(jugador.estadoPartido.enJuego){
         arbolDecisiones(jugador, udp_socket, server_udp);
     }  
 

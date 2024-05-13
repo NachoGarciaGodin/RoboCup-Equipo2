@@ -98,7 +98,7 @@ void arbolJugador1(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Mini
     }
     else if(jugador.flags.distanciaBalon<2){
         socket.sendTo("(catch " + to_string(jugador.flags.orientacionBalon) + ")", address);
-        pelotaEnManos=0;
+        pelotaEnManos=1;
     }
 }
 void arbolJugador2(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
@@ -178,18 +178,23 @@ void arbolJugador2(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Mini
 
 
     /* Aqui la decision depende de la posicion del balon */
-    if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria <= 25 ){
+    if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria <= 25 && auxDistPorteriaContraria != -9343){
         cout << "Chuto a puerta" << endl;
-        socket.sendTo(golpearBalon("60", to_string(auxOriPorteriaContraria)), address);        
+        cout << "Distancia porteria: " << auxDistPorteriaContraria << endl;
+
+        socket.sendTo(golpearBalon("60", to_string(auxOriPorteriaContraria + 3)), address);        
     }// si tenemos el balon cerca pasamos a un compañero
-    else if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria > 25 && distCompCerca > 10){
-        cout << "Hago un pase" << endl;
-        socket.sendTo(golpearBalon("40", to_string(oriCompCerca)), address);
+     else if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria > 25 && (distCompCerca > 10 || distCompCerca < 30 )
+      && distCompCerca != -1 && auxDistPorteriaContraria != -9343){
+        socket.sendTo(golpearBalon(to_string(distCompCerca), to_string(oriCompCerca)), address);
     } //si estamos lejos de la porteria, tenemos el balon cerca y no hay buen pase corremos con el balon
-    else if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria > 25 && distCompCerca < 10){
-        socket.sendTo(golpearBalon("20", to_string(oriCompCerca)), address);
+    else if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria > 25 && (distCompCerca < 10 || distCompCerca > 30 )){
+        socket.sendTo(golpearBalon("10", to_string(auxOriPorteriaContraria)), address);
+    } //si no veo la porteria y tengo que moverme, p
+     else if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria == -9343 && (distCompCerca < 10 || distCompCerca > 30 )){
+        socket.sendTo(golpearBalon("10", "0"), address); 
     } // si estamos cerca del balon y hay un enemigo cerca hacemos tackle
-    else if (jugador.flags.distanciaBalon <= 0.6 && distEnemCerca <= 0.6){
+    else if (jugador.flags.distanciaBalon <= 0.6 && distEnemCerca <= 0.6 && distEnemCerca != -1){
         cout << "Tackleo" << endl;
         socket.sendTo(("(tackle " + to_string(oriEnemCerca) + ")"), address);
     }
@@ -304,19 +309,22 @@ void arbolJugador6(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Mini
 
 
     /* Aqui la decision depende de la posicion del balon */
-    if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria <= 25 ){
+    if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria <= 25 && auxDistPorteriaContraria != -9343){
         cout << "Chuto a puerta" << endl;
-
+        cout << "Distancia porteria: " << auxDistPorteriaContraria << endl;
         socket.sendTo(golpearBalon("60", to_string(auxOriPorteriaContraria + 3)), address);        
     }// si tenemos el balon cerca pasamos a un compañero
-    else if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria > 25 && distCompCerca >= 10){
-        cout << "Hago un pase" << endl;
-        socket.sendTo(golpearBalon(to_string(jugador.flags.compañerosCerca[0].first), to_string(jugador.flags.compañerosCerca[0].second)), address);
+     else if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria > 25 && (distCompCerca > 10 || distCompCerca < 30 )
+      && distCompCerca != -1 && auxDistPorteriaContraria != -9343){
+        socket.sendTo(golpearBalon(to_string(distCompCerca), to_string(oriCompCerca)), address);
     } //si estamos lejos de la porteria, tenemos el balon cerca y no hay buen pase corremos con el balon
-    else if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria > 25 && distCompCerca < 10){
-        socket.sendTo(golpearBalon("20", to_string(oriCompCerca)), address);
+    else if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria > 25 && (distCompCerca < 10 || distCompCerca > 30 )){
+        socket.sendTo(golpearBalon("10", to_string(auxOriPorteriaContraria)), address);
+    } //si no veo la porteria y tengo que moverme, p
+     else if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria == -9343 && (distCompCerca < 10 || distCompCerca > 30 )){
+        socket.sendTo(golpearBalon("10", "0"), address); 
     } // si estamos cerca del balon y hay un enemigo cerca hacemos tackle
-    else if (jugador.flags.distanciaBalon <= 0.6 && distEnemCerca <= 0.6){
+    else if (jugador.flags.distanciaBalon <= 0.6 && distEnemCerca <= 0.6 && distEnemCerca != -1){        
         cout << "Tackleo" << endl;
         socket.sendTo(("(tackle " + to_string(oriEnemCerca) + ")"), address);
     }
@@ -435,20 +443,24 @@ void accionesRepetidas(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket
 
 
     /* Aqui la decision depende de la posicion del balon */
-    if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria <= 25 ){
+    if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria <= 25 && auxDistPorteriaContraria != -9343){
         cout << "Chuto a puerta" << endl;
+        cout << "Distancia porteria: " << auxDistPorteriaContraria << endl;
 
         socket.sendTo(golpearBalon("60", to_string(auxOriPorteriaContraria + 3)), address);        
     }// si tenemos el balon cerca pasamos a un compañero
-    else if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria > 25 && distCompCerca > 10 && auxDistPorteriaContraria != -9343){
-        cout << "Hago un pase" << endl;
-        socket.sendTo(golpearBalon(to_string(jugador.flags.compañerosCerca[0].first), to_string(jugador.flags.compañerosCerca[0].second)), address);
+     else if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria > 25 && (distCompCerca > 10 || distCompCerca < 30 )
+      && distCompCerca != -1 && auxDistPorteriaContraria != -9343){
+        socket.sendTo(golpearBalon(to_string(distCompCerca), to_string(oriCompCerca)), address);
     } //si estamos lejos de la porteria, tenemos el balon cerca y no hay buen pase corremos con el balon
-    else if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria > 25 && distCompCerca < 10){
-        socket.sendTo(golpearBalon("20", to_string(oriCompCerca)), address);
+    else if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria > 25 && (distCompCerca < 10 || distCompCerca > 30 )){
+        socket.sendTo(golpearBalon("10", to_string(auxOriPorteriaContraria)), address);
+    } //si no veo la porteria y tengo que moverme, p
+     else if(jugador.flags.distanciaBalon <= 0.6 && auxDistPorteriaContraria == -9343 && (distCompCerca < 10 || distCompCerca > 30 )){
+        socket.sendTo(golpearBalon("10", "0"), address); 
     } // si estamos cerca del balon y hay un enemigo cerca hacemos tackle
-    else if (jugador.flags.distanciaBalon <= 0.6 && distEnemCerca <= 0.6){
-        cout << "Tackleo" << endl;
+    else if (jugador.flags.distanciaBalon <= 0.6 && distEnemCerca <= 0.6 && distEnemCerca != -1){
+            cout << "Tackleo" << endl;
         socket.sendTo(("(tackle " + to_string(oriEnemCerca) + ")"), address);
     }
     else if(jugador.flags.distanciaBalon > 0.6){
