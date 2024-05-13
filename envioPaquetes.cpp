@@ -446,6 +446,8 @@ void arbolJugador9(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Mini
             socket.sendTo(golpearBalon("10", "-20"), address);
         else if (((jugador.equipo=="l") && (jugador.flags.distanciaCornerDer2 != -9343)) || ((jugador.equipo=="r") && (jugador.flags.distanciaCornerIzq2 != -9343)))
             socket.sendTo(golpearBalon("10", "20"), address);
+        else //cuando no ves nada
+            socket.sendTo(golpearBalon("30", "90"), address);
     } // si estamos cerca del balon y hay un enemigo cerca hacemos tackle
     else if (jugador.flags.distanciaBalon <= 0.6 && distEnemCerca <= 0.6 && distEnemCerca != -1){
             cout << "Tackleo" << endl;
