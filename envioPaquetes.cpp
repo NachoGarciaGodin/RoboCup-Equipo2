@@ -30,9 +30,10 @@ void colocarJugadorSegunNumero(Jugador jugador, MinimalSocket::udp::Udp<true> & 
 
 void arbolDecisiones(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
     if(jugador.estadoPartido.colocarse == true){
+        jugador.estadoPartido.enJuego = false;
+        cout << "Colocando jugador: " << endl;
         colocarJugadorSegunNumero(jugador, socket, address);
         jugador.estadoPartido.colocarse = false;
-        jugador.estadoPartido.enJuego = true;
     }else if (!jugador.siguienteComando.empty()){
         //Este case solo ocurre cuando queremos obligar a un jugador a hacer algo por ejemplo despues de kickoff el pase es hacia detras si o si
         cout << "Siguiente comando: " << jugador.siguienteComando << endl;

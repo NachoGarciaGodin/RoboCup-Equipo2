@@ -210,7 +210,7 @@ void comprobarKickOff(string const & mensajeRecibido, Jugador & jugador){
     if (doubleParsedMsg.at(3).compare("kick_off_l") || doubleParsedMsg.at(3).compare("kick_off_r") ){
         jugador.estadoPartido.kickOff = true;
         jugador.estadoPartido.enJuego = true;
-        jugador.estadoPartido.colocarse = false;
+      //  jugador.estadoPartido.colocarse = false;
         cout << "Ha empezado el partido" << endl;
         if(jugador.numero == 11)
             jugador.siguienteComando = "(kick 30 180)";
@@ -243,16 +243,13 @@ void mediaParte(string const & mensajeRecibido, Jugador & jugador){
 
 void hearGol(string const & mensajeRecibido, Jugador & jugador){
     auto doubleParsedMsg = dividir_en_palabras(mensajeRecibido);
-    if (doubleParsedMsg.at(3).find("goal_") != -1){ 
+    if (doubleParsedMsg.at(3).find("goal_") != -1){      
         if(((doubleParsedMsg.at(3).find("_l")) != -1 ) && (jugador.numero==11) && (jugador.equipo == "r"))
             jugador.estadoPartido.kickOff = true;
         if(((doubleParsedMsg.at(3).find("_r")) != -1) && (jugador.numero==11) && (jugador.equipo == "l"))
             jugador.estadoPartido.kickOff = true;
         jugador.estadoPartido.colocarse = true;
-        jugador.estadoPartido.enJuego = false;
     }
-
-    return;
 }
 
   void parseSeeRefactor(string const & mensaje, Jugador & jugador) {
