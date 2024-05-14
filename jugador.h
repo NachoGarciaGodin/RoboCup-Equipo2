@@ -17,8 +17,8 @@ struct Flags {
     float orientacionPorteriaDer;
     float distanciaPorteriaIzq;
     float orientacionPorteriaIzq;
-    float distanciaCornerIzq1;
-    float distanciaCornerIzq2;
+    float distanciaCornerIzq1; //1 es arriba
+    float distanciaCornerIzq2; //2 es abajo
     float distanciaCornerDer1;
     float distanciaCornerDer2;
     float distanciaCentroCampo1;
