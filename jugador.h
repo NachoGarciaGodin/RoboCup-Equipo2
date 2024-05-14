@@ -10,6 +10,7 @@ struct EstadoPartido {
     bool enJuego = false;
     bool kickOff = false;
     bool colocarse = false;
+    bool kickOffGoalie = false;
 };
 
 struct Flags {
@@ -21,6 +22,7 @@ struct Flags {
     float distanciaCornerIzq2; //2 es abajo
     float distanciaCornerDer1;
     float distanciaCornerDer2;
+    float distanciaCentroCampo;
     float distanciaCentroCampo1;
     float distanciaCentroCampo2;
     float distanciaAreaIzqArriba;

@@ -243,12 +243,17 @@ void mediaParte(string const & mensajeRecibido, Jugador & jugador){
 
 void hearGol(string const & mensajeRecibido, Jugador & jugador){
     auto doubleParsedMsg = dividir_en_palabras(mensajeRecibido);
-    if (doubleParsedMsg.at(3).find("goal_") != -1){      
+    if (doubleParsedMsg.at(3).find("goal_l") != -1 || doubleParsedMsg.at(3).find("goal_r") != -1){      
         if(((doubleParsedMsg.at(3).find("_l")) != -1 ) && (jugador.numero==11) && (jugador.equipo == "r"))
             jugador.estadoPartido.kickOff = true;
         if(((doubleParsedMsg.at(3).find("_r")) != -1) && (jugador.numero==11) && (jugador.equipo == "l"))
             jugador.estadoPartido.kickOff = true;
         jugador.estadoPartido.colocarse = true;
+    } else if(doubleParsedMsg.at(3).find("goal_kick_") != -1){
+        if(((doubleParsedMsg.at(3).find("_l")) != -1 ) && (jugador.numero==1) && (jugador.equipo == "r"))
+            jugador.estadoPartido.kickOffGoalie = true;
+        if(((doubleParsedMsg.at(3).find("_r")) != -1) && (jugador.numero==1) && (jugador.equipo == "l"))
+            jugador.estadoPartido.kickOffGoalie = true;
     }
 }
 
@@ -323,6 +328,10 @@ void hearGol(string const & mensajeRecibido, Jugador & jugador){
             else if(palabra.find("(p r t") != string::npos) {
                 resultado = sacarValoresFlags(palabra);
                 jugador.flags.distanciaAreaDerArriba = stof(resultado.at(0));
+            }  
+            else if(palabra.find("(f c") != string::npos) {
+                resultado = sacarValoresFlags(palabra);
+                jugador.flags.distanciaCentroCampo = stof(resultado.at(0));
             }  
         }    
     }
