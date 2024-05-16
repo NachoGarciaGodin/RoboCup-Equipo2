@@ -183,6 +183,7 @@ vector<string> sacarValoresFlags(const string &palabra){
 
 void parseHearMessage(string const & mensajeRecibido, Jugador & jugador) {
 
+    cout << "Mensaje recibido: " << mensajeRecibido << endl;
     if(mensajeRecibido.find("kick_off") != -1){
         comprobarKickOff(mensajeRecibido, jugador);
     }
@@ -193,12 +194,33 @@ void parseHearMessage(string const & mensajeRecibido, Jugador & jugador) {
     if (mensajeRecibido.find("goal_") != -1){ 
         hearGol(mensajeRecibido, jugador);
     }
-    // else if (doubleParsedMsg.at(3) == "kick_in_l" && doubleParsedMsg.at(3) == "kick_in_r"){ //saque de banda
-    //     if(ladoKickOff == "kick_in_l")
-            
-    // }
-    //else if (doubleParsedMsg.at(3) == "corner_kick"){ //corner
-
+    else if (mensajeRecibido.find("kick_in_l")!= -1 || mensajeRecibido.find("kick_in_r") != -1){ //saque de banda
+        jugador.estadoPartido.saqueBanda = true;
+        if(mensajeRecibido.find("kick_in_l")!= -1 && jugador.equipo == "l")
+            jugador.estadoPartido.saqueBandaYo = true;
+        else if (mensajeRecibido.find("kick_in_r") != -1 && jugador.equipo == "r")
+            jugador.estadoPartido.saqueBandaYo = true;
+    }
+    else if (mensajeRecibido.find("corner_kick_l")!= -1 || mensajeRecibido.find("corner_kick_r") != -1){ //corner
+        jugador.estadoPartido.saqueBanda = true;
+        if(mensajeRecibido.find("corner_kick_l")!= -1 && jugador.equipo == "l")
+            jugador.estadoPartido.saqueBandaYo = true;
+        else if (mensajeRecibido.find("corner_kick_r") != -1 && jugador.equipo == "r")
+            jugador.estadoPartido.saqueBandaYo = true;
+    }
+    else if (mensajeRecibido.find("foul_charge_l")!= -1 || mensajeRecibido.find("foul_charge_r") != -1){ //falta
+        jugador.estadoPartido.saqueBanda = true;
+        if(mensajeRecibido.find("foul_charge_l")!= -1 && jugador.equipo == "l")
+            jugador.estadoPartido.saqueBandaYo = true;
+        else if (mensajeRecibido.find("foul_charge_r") != -1 && jugador.equipo == "r")
+            jugador.estadoPartido.saqueBandaYo = true;
+    }
+    else if (mensajeRecibido.find("play_on")!= -1){
+        jugador.estadoPartido.saqueBanda = false;
+        jugador.estadoPartido.saqueBandaYo = false;
+        jugador.estadoPartido.saquePorteria = false;
+        jugador.estadoPartido.saquePorteriaYo = false;
+    }
     // }else if (doubleParsedMsg.at(3) == "goal_kick"){ //penalti ? creo que saque de puerta
 
     // }
@@ -250,10 +272,11 @@ void hearGol(string const & mensajeRecibido, Jugador & jugador){
             jugador.estadoPartido.kickOff = true;
         jugador.estadoPartido.colocarse = true;
     } else if(doubleParsedMsg.at(3).find("goal_kick_") != -1){
-        if(((doubleParsedMsg.at(3).find("_l")) != -1 ) && (jugador.numero==1) && (jugador.equipo == "r"))
-            jugador.estadoPartido.kickOffGoalie = true;
-        if(((doubleParsedMsg.at(3).find("_r")) != -1) && (jugador.numero==1) && (jugador.equipo == "l"))
-            jugador.estadoPartido.kickOffGoalie = true;
+        jugador.estadoPartido.saquePorteria = true;
+        if(((doubleParsedMsg.at(3).find("_l")) != -1 ) && (jugador.numero==1) && (jugador.equipo == "l"))
+            jugador.estadoPartido.saquePorteriaYo = true;
+        if(((doubleParsedMsg.at(3).find("_r")) != -1) && (jugador.numero==1) && (jugador.equipo == "r"))
+            jugador.estadoPartido.saquePorteriaYo = true;
     }
 }
 

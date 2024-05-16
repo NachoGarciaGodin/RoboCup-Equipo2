@@ -124,7 +124,7 @@ int main(int argc, char *argv[] )
     if(jugador.estadoPartido.enJuego){
         arbolDecisiones(jugador, udp_socket, server_udp);
     }  
-
+    
     
     }
 }

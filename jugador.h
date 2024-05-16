@@ -11,6 +11,10 @@ struct EstadoPartido {
     bool kickOff = false;
     bool colocarse = false;
     bool kickOffGoalie = false;
+    bool saqueBanda = false;
+    bool saqueBandaYo = false;
+    bool saquePorteria=false;
+    bool saquePorteriaYo=false;
 };
 
 struct Flags {
