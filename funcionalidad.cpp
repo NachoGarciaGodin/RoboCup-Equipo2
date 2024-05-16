@@ -285,12 +285,12 @@ void hearGol(string const & mensajeRecibido, Jugador & jugador){
     vector<string> resultado;
     for (const string &palabra : palabras) {
         if (palabra != "see" && palabra != "0") {
-            if(palabra.find("(g r") != string::npos) {
+            if(palabra.find("(g r)") != string::npos) {
                 resultado = sacarValoresFlags(palabra);
                 jugador.flags.distanciaPorteriaDer = stof(resultado.at(0));
                 jugador.flags.orientacionPorteriaDer = stof(resultado.at(1));
             }
-            else if(palabra.find("(g l") != string::npos) {
+            else if(palabra.find("(g l)") != string::npos) {
                 resultado = sacarValoresFlags(palabra);
                 jugador.flags.distanciaPorteriaIzq = stof(resultado.at(0));
                 jugador.flags.orientacionPorteriaIzq = stof(resultado.at(1));
@@ -299,34 +299,40 @@ void hearGol(string const & mensajeRecibido, Jugador & jugador){
                 resultado = sacarValoresFlags(palabra);
                 jugador.flags.distanciaCornerDer1 = stof(resultado.at(0));
             }
-            else if(palabra.find("(f r b") != string::npos) {
+            else if(palabra.find("(f r b)") != string::npos) {
                 resultado = sacarValoresFlags(palabra);
                 jugador.flags.distanciaCornerDer2 = stof(resultado.at(0));
             }
-            else if(palabra.find("(f l t") != string::npos) {
+            else if(palabra.find("(f l t)") != string::npos) {
                 resultado = sacarValoresFlags(palabra);
                 jugador.flags.distanciaCornerIzq1 = stof(resultado.at(0));
             }
-            else if(palabra.find("(f l b") != string::npos) {
+            else if(palabra.find("(f l b)") != string::npos) {
                 resultado = sacarValoresFlags(palabra);
                 jugador.flags.distanciaCornerIzq2 = stof(resultado.at(0));
             }
-            else if(palabra.find("(f t 0") != string::npos) {
+            else if(palabra.find("(f t 0)") != string::npos) {
                 resultado = sacarValoresFlags(palabra);
                 jugador.flags.distanciaCentroCampo1 = stof(resultado.at(0));
             }
-            else if(palabra.find("(f b 0") != string::npos) {
+            else if(palabra.find("(f b 0)") != string::npos) {
                 resultado = sacarValoresFlags(palabra);
                 jugador.flags.distanciaCentroCampo2 = stof(resultado.at(0));
             }    
-            else if(palabra.find("(b") != string::npos) {
+            else if(palabra.find("(b)") != string::npos) {
                 resultado = sacarValoresFlags(palabra);
                 jugador.flags.distanciaBalon = stof(resultado.at(0));
                 jugador.flags.orientacionBalon = stof(resultado.at(1));
             } 
-            else if(palabra.find("(f l b 20") != string::npos || palabra.find("(f l t 20") != string::npos || palabra.find("(f r b 20") != string::npos || palabra.find("(f r t 20") != string::npos){
+            else if(palabra.find("(f l b 20") != string::npos || palabra.find("(f l t 20") != string::npos || palabra.find("(f l b 10") != string::npos || palabra.find("(f l t 10") != string::npos 
+                    || palabra.find("(f l b 30") != string::npos || palabra.find("(f l t 30") != string::npos ){
                 resultado = sacarValoresFlags(palabra);
-                jugador.flags.flagsPorteria.push_back(stof(resultado.at(0)));
+                jugador.flags.flagsFondoIzquierda.push_back(stof(resultado.at(0)));
+            }
+            else if(palabra.find("(f r b 20") != string::npos || palabra.find("(f r t 20") != string::npos || palabra.find("(f r b 10") != string::npos || palabra.find("(f r t 10") != string::npos 
+                    || palabra.find("(f r b 30") != string::npos || palabra.find("(f r t 30") != string::npos ){
+                resultado = sacarValoresFlags(palabra);
+                jugador.flags.flagsFondoDerecha.push_back(stof(resultado.at(0)));
             }
             else if(palabra.find("(p l b") != string::npos) {
                 resultado = sacarValoresFlags(palabra);
@@ -489,4 +495,6 @@ void limpiarDatosJugador(Jugador & jugador){
     jugador.flags.distanciaBalon = 3;
     jugador.flags.orientacionBalon = 30;
     jugador.siguienteComando.clear();
+    jugador.flags.flagsFondoDerecha.clear();
+    jugador.flags.flagsFondoIzquierda.clear();
 }

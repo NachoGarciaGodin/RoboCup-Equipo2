@@ -10,7 +10,6 @@ struct EstadoPartido {
     bool enJuego = false;
     bool kickOff = false;
     bool colocarse = false;
-    bool kickOffGoalie = false;
     bool saqueBanda = false;
     bool saqueBandaYo = false;
     bool saquePorteria=false;
@@ -40,7 +39,9 @@ struct Flags {
     vector<pair<float, float>> compañerosCerca; //primero distancia segundo orientacion
     vector<pair<float, float>> enemigosCerca; //primero distancia segundo orientacion
 
-    vector<float> flagsPorteria; //primero distancia segundo orientacion
+    vector<float> flagsFondoIzquierda; //primero distancia segundo orientacion
+    vector<float> flagsFondoDerecha;
+   
    // vector<float> flagsPorteriaIzq; 
    // vector<float> flagsPorteriaDer; 
 
