@@ -10,16 +10,16 @@ Puerto=6500
 if [ $? -eq 0 ]; then
     echo "La compilación fue exitosa. Ejecutando el programa..."
 
-    gnome-terminal -- bash -c "./player NottighamMiedo goalie  $Puerto; exec bash" 
+    gnome-terminal -- bash -c "./player NottighamMiedo G  $Puerto; exec bash" 
     ((Puerto++))
-    gnome-terminal -- bash -c "./player LosCojos goalie $Puerto; exec bash" 
+    #gnome-terminal -- bash -c "./player LosCojos goalie $Puerto; exec bash" 
         
     for (( i=1; i<=10; i++ ))
     do
         ((Puerto++))
         gnome-terminal -- bash -c "./player NottighamMiedo j  $Puerto; exec bash" 
         ((Puerto++))
-        gnome-terminal -- bash -c "./player LosCojos j $Puerto; exec bash" 
+        #gnome-terminal -- bash -c "./player LosCojos G $Puerto; exec bash" 
     done
 
 else

@@ -16,6 +16,23 @@ struct EstadoPartido {
     bool saquePorteriaYo=false;
 };
 
+
+struct InfoEquipo {
+    float minDistCompa;
+    float minOriCompa;
+
+    float maxDistCompa;
+    float maxOriCompa;
+
+    float minDistEnem;
+    float minOriEnem;
+
+    float distMiPorteria;
+    float distPorteriaRival;
+    float oriPorteriaRival;
+
+};
+
 struct Flags {
     float distanciaPorteriaDer;
     float orientacionPorteriaDer;
@@ -37,14 +54,11 @@ struct Flags {
     float distanciaBalon = 3;
     float orientacionBalon = 30;
     vector<pair<float, float>> compañerosCerca; //primero distancia segundo orientacion
-    vector<pair<float, float>> enemigosCerca; //primero distancia segundo orientacion
+    vector<pair<float, float>> enemigosCerca; 
 
-    vector<float> flagsFondoIzquierda; //primero distancia segundo orientacion
+    vector<float> flagsFondoIzquierda; 
     vector<float> flagsFondoDerecha;
    
-   // vector<float> flagsPorteriaIzq; 
-   // vector<float> flagsPorteriaDer; 
-
 
 };
 
@@ -52,17 +66,13 @@ class Jugador {
 public:
     Jugador(){}
 
-    // Destructor
-    ~Jugador() {}
-
-    // Atributos privados
     int numero;
     string equipo;
     string nombreEquipo;
    
     EstadoPartido estadoPartido;
     Flags flags;
-
+    InfoEquipo infoEquipo;
 
     string siguienteComando;
 };

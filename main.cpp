@@ -72,15 +72,16 @@ int main(int argc, char *argv[] )
     // send a message to another udp
     MinimalSocket::Address other_recipient_udp = MinimalSocket::Address{"127.0.0.1", 6000};
     jugador.nombreEquipo=argv[1];
-    if(argv[2]=="goalie"){
-        udp_socket.sendTo("(init "+jugador.nombreEquipo+"(version 19) (goalie))", other_recipient_udp);
-    }else{
-        udp_socket.sendTo("(init "+jugador.nombreEquipo+"(version 19))", other_recipient_udp);
+    string tipo = argv[2];
+    if (tipo.compare("G")==0) {
+        udp_socket.sendTo("(init " + jugador.nombreEquipo + "(version 19) (goalie))", other_recipient_udp);
+    } else {
+        udp_socket.sendTo("(init " + jugador.nombreEquipo + "(version 19))", other_recipient_udp);
     }
 
     cout << "Message sent" << endl;
 
-    std::size_t message_max_size = 5000;
+    std::size_t message_max_size = 9999;
     cout << "Waiting for a message" << endl;
     auto received_message = udp_socket.receive(message_max_size);
     // check the sender address

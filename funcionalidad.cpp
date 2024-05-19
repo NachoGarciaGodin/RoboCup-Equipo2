@@ -183,7 +183,6 @@ vector<string> sacarValoresFlags(const string &palabra){
 
 void parseHearMessage(string const & mensajeRecibido, Jugador & jugador) {
 
-    cout << "Mensaje recibido: " << mensajeRecibido << endl;
     if(mensajeRecibido.find("kick_off") != -1){
         comprobarKickOff(mensajeRecibido, jugador);
     }
@@ -232,7 +231,6 @@ void comprobarKickOff(string const & mensajeRecibido, Jugador & jugador){
     if (doubleParsedMsg.at(3).compare("kick_off_l") || doubleParsedMsg.at(3).compare("kick_off_r") ){
         jugador.estadoPartido.kickOff = true;
         jugador.estadoPartido.enJuego = true;
-      //  jugador.estadoPartido.colocarse = false;
         cout << "Ha empezado el partido" << endl;
         if(jugador.numero == 11)
             jugador.siguienteComando = "(kick 30 180)";
@@ -366,45 +364,8 @@ void hearGol(string const & mensajeRecibido, Jugador & jugador){
     }
   }
 
-/*
-void parseSee(string const & mensajeInicial, Jugador & jugador) {
-    int posSee=mensajeInicial.find("see",0);
-   
-    if (posSee != -1){
-        int posBall = mensajeInicial.find("(b)",posSee);
-        int posFlagPorteria=-1;
-        if (posBall != -1){
-            string aux = mensajeInicial.substr(posBall+4,8);
-            jugador.distanciaAlBalon = distancia(aux);
-            jugador.orientacionAlBalon = orientacion(aux);
-        }
-        if(jugador.equipo=="r")
-            posFlagPorteria= mensajeInicial.find("(g l)",posSee);
-        else
-            posFlagPorteria= mensajeInicial.find("(g r)",posSee);
-        if (posFlagPorteria != -1){
-            string aux2 = mensajeInicial.substr(posFlagPorteria+5,11);
-            jugador.distanciaPorteria = distancia(aux2);
-            jugador.orientacionPorteria = orientacion(aux2);
-        }
-        int posseePlayer = mensajeInicial.find("((p",posSee);
-        if(posseePlayer != -1){
-            int posFinalgo = mensajeInicial.find(") ",posseePlayer);
-            if(posFinalgo != -1){
-                jugador.distanciaPase=distancia(mensajeInicial.substr(posFinalgo+2,8));
-                jugador.orientacionPase=orientacion(mensajeInicial.substr(posFinalgo+2,8));
-                if((jugador.distanciaPorteria > 15) && (jugador.distanciaPase < 15))
-                    if(jugador.numero == 11){
-                    //cout << "Quiero pasar: " << endl;
-                    }
-                    jugador.hayPase=true;
-            }
-        }
-    }
-}
-*/
 
-float distancia(string const &  mensajeRecibido){ // revisar decimales, no los coge
+float distancia(string const &  mensajeRecibido){ 
     int distancia=0;
     auto mensaje = mensajeRecibido;
     if(mensajeRecibido.find(")",0)!=-1)
