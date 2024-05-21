@@ -360,7 +360,23 @@ void hearGol(string const & mensajeRecibido, Jugador & jugador){
                 resultado = sacarValoresFlags(palabra);
                 jugador.flags.distanciaCentroCampo = stof(resultado.at(0));
             }  
-        }    
+            else if(palabra.find("(f t l 50)") != string::npos || palabra.find("(f t l 30)") != string::npos || palabra.find("(f t l 10)") != string::npos || palabra.find("(f t 0)") != string::npos ){
+                resultado = sacarValoresFlags(palabra);
+                jugador.flags.flagsBandaSuperiorIzq.push_back(stof(resultado.at(0)));
+            }
+            else if(palabra.find("(f b l 50)") != string::npos || palabra.find("(f b l 30)") != string::npos || palabra.find("(f b l 10)") != string::npos || palabra.find("(f b 0)") != string::npos ){
+                resultado = sacarValoresFlags(palabra);
+                jugador.flags.flagsBandaInferiorIzq.push_back(stof(resultado.at(0)));
+            }
+            else if(palabra.find("(f t r 50)") != string::npos || palabra.find("(f t r 30)") != string::npos || palabra.find("(f t r 10)") != string::npos || palabra.find("(f t 0)") != string::npos ){
+                resultado = sacarValoresFlags(palabra);
+                jugador.flags.flagsBandaSuperiorDer.push_back(stof(resultado.at(0)));
+            }
+            else if(palabra.find("(f b r 50)") != string::npos || palabra.find("(f b r 30)") != string::npos || palabra.find("(f b r 10)") != string::npos || palabra.find("(f b 0)") != string::npos ){
+                resultado = sacarValoresFlags(palabra);
+                jugador.flags.flagsBandaInferiorDer.push_back(stof(resultado.at(0)));
+            }    
+        }
     }
   }
 
@@ -458,4 +474,15 @@ void limpiarDatosJugador(Jugador & jugador){
     jugador.siguienteComando.clear();
     jugador.flags.flagsFondoDerecha.clear();
     jugador.flags.flagsFondoIzquierda.clear();
+    jugador.flags.flagsBandaSuperiorIzq.clear();
+    jugador.flags.flagsBandaInferiorIzq.clear();
+    jugador.flags.flagsBandaSuperiorDer.clear();
+    jugador.flags.flagsBandaInferiorDer.clear();
+    jugador.infoEquipo.distMiPorteria = -9343;
+    jugador.infoEquipo.distPorteriaRival = -9343;
+    jugador.infoEquipo.oriPorteriaRival = -9343;
+    jugador.infoEquipo.maxOriCompa = -9343;
+    jugador.infoEquipo.minDistEnem = -9343;
+    jugador.infoEquipo.minOriEnem = -9343;
+    
 }

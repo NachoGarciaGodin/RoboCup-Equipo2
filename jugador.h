@@ -58,6 +58,10 @@ struct Flags {
 
     vector<float> flagsFondoIzquierda; 
     vector<float> flagsFondoDerecha;
+    vector<float> flagsBandaSuperiorIzq;
+    vector<float> flagsBandaSuperiorDer;
+    vector<float> flagsBandaInferiorIzq;
+    vector<float> flagsBandaInferiorDer;
    
 
 };
