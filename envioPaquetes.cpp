@@ -217,38 +217,31 @@ void arbolJugador2(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Mini
     else if(jugador.estadoPartido.saquePorteria && !jugador.estadoPartido.saquePorteriaYo) 
         socket.sendTo(("(dash 0)"),address);
 
-    //ACCIONES DESPEJAR BALON 
     //Si tengo el balon en los pies y estoy mirando hacia el campo contrario despejo hacia su porteria
     else if(jugador.flags.distanciaBalon <= 1 && jugador.infoEquipo.distPorteriaRival != -9343){
-        cout << "Soy el jugador numero: " << jugador.numero << " del equipo: "<< jugador.equipo << " y voy a despejar el balon hacia la porteria rival" << endl;
         socket.sendTo(golpearBalon("100", to_string(jugador.infoEquipo.oriPorteriaRival)), address);  
     }else if (jugador.flags.distanciaBalon <= 1 && ((bandaSuperiorMasCercana != -1 && jugador.equipo == "r") || (bandaInferiorMasCercana != -1 && jugador.equipo == "l"))){
-        cout << "Soy el jugador numero: " << jugador.numero << " del equipo: "<< jugador.equipo << " y voy a despejar el balon -90 grados" << endl; 
         socket.sendTo(golpearBalon("100", "-90"), address);
     }else if (jugador.flags.distanciaBalon <= 1 && ((bandaInferiorMasCercana != -1 && jugador.equipo == "r") || (bandaSuperiorMasCercana != -1 && jugador.equipo == "l"))){
-        cout << "Soy el jugador numero: " << jugador.numero << " del equipo: "<< jugador.equipo << " y voy a despejar el balon 90 grados" << endl;
         socket.sendTo(golpearBalon("100", "90"), address);
     }else if(jugador.flags.distanciaBalon <= 1 && jugador.infoEquipo.distPorteriaRival == -9343 && jugador.flags.distanciaCentroCampo2 != -9343){
-        cout << "Soy el jugador numero: " << jugador.numero << " del equipo: "<< jugador.equipo << " y voy a despejar el balon -20 grados" << endl;
         socket.sendTo(golpearBalon("100", "-20"), address);
     }else if(jugador.flags.distanciaBalon <= 1 && jugador.infoEquipo.distMiPorteria != -9343){
-        cout << "Soy el jugador numero: " << jugador.numero << " del equipo: "<< jugador.equipo << " y voy a despejar el balon 180 grados" << endl;
         socket.sendTo(golpearBalon("100", "180"), address);
     }
     
     //Si tengo el balon cerca por detras de mi corro hacia el balon 
     else if (jugador.infoEquipo.distMiPorteria != -9343 && jugador.flags.distanciaBalon > 1){
-        socket.sendTo("(dash 80 "+ to_string(jugador.flags.orientacionBalon) + ")", address);
+        socket.sendTo("(dash 100 "+ to_string(jugador.flags.orientacionBalon) + ")", address);
     }
     else if(jugador.flags.distanciaBalon <= 1 && jugador.infoEquipo.minDistEnem <= 1 && jugador.infoEquipo.minDistEnem != -9343){
-        cout << "Soy el jugador numero: " << jugador.numero << " del equipo: "<< jugador.equipo << " y voy a hacer un tackle al enemigo" << endl;
         socket.sendTo(("(tackle " + to_string(jugador.flags.orientacionBalon) + ")"), address);
     }//Si estoy lejos del balon y demasiafo arriba en el campo corro hacia mi posicion
     else if(jugador.flags.distanciaBalon > 20 && fondoMasCercano < 90 && fondoMasCercano != -1){
             socket.sendTo("(dash 50 180)", address);
     }// si trngo el balon cerca corro hacia el al menos que este cerca del medio del campo
-    else if(jugador.flags.distanciaBalon > 1 &&  jugador.flags.distanciaBalon < 20 && (fondoMasCercano >= 70 || fondoMasCercano == -1)){
-        socket.sendTo("(dash 80 "+ to_string(jugador.flags.orientacionBalon) + ")", address);
+    else if(jugador.flags.distanciaBalon > 1 &&  jugador.flags.distanciaBalon < 30 && (fondoMasCercano >= 70 || fondoMasCercano == -1)){
+        socket.sendTo("(dash 100 "+ to_string(jugador.flags.orientacionBalon) + ")", address);
     }
     
 }
@@ -345,14 +338,17 @@ void arbolJugador6(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Mini
         //    socket.sendTo(golpearBalon(to_string(jugador.infoEquipo.minDistCompa * 2.5), to_string(jugador.infoEquipo.minOriCompa )), address);
         //}// Y si estoy mas perdido que un pulpo en un garaje pues tiro para alante
         else{
-            socket.sendTo(golpearBalon("15", "180"), address);
+            socket.sendTo(golpearBalon("25", "180"), address);
         }
+    }
+    else if (jugador.infoEquipo.distMiPorteria != -9343 && jugador.flags.distanciaBalon > 1){
+        socket.sendTo("(dash 100 "+ to_string(jugador.flags.orientacionBalon) + ")", address);
     }
     else if(jugador.flags.distanciaBalon > 20 && fondoMasCercano < 80 && fondoMasCercano != -1){
         socket.sendTo("(dash 50 180)", address);
     }// si trngo el balon cerca corro hacia el al menos que este cerca del medio del campo
-    else if(jugador.flags.distanciaBalon > 1 &&  jugador.flags.distanciaBalon < 20 && (fondoMasCercano >= 60 || fondoMasCercano == -1)){
-        socket.sendTo("(dash 80 "+ to_string(jugador.flags.orientacionBalon) + ")", address);
+    else if(jugador.flags.distanciaBalon > 1 &&  jugador.flags.distanciaBalon < 30 && (fondoMasCercano >= 60 || fondoMasCercano == -1)){
+        socket.sendTo("(dash 100 "+ to_string(jugador.flags.orientacionBalon) + ")", address);
     }
 }
 void arbolJugador7(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
@@ -368,9 +364,6 @@ void arbolJugador9(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Mini
 
 void arbolJugador10(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
 
-
-    /*Falta una funcion que nos diga a que lado estamos mirando, si vemos las flags de nuestro campo entonces tenemos que hacer 180 en todo*/
-    /* Aqui nos orientamos  */
     if((jugador.flags.orientacionBalon > 10 ))
         socket.sendTo(orientarJugador(to_string(jugador.flags.orientacionBalon)), address);
     else if(jugador.flags.orientacionBalon < -10)
@@ -394,18 +387,9 @@ void arbolJugador10(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Min
         socket.sendTo(("(dash 0)"),address);
     else if(jugador.estadoPartido.saquePorteria)
         socket.sendTo(("(dash 0)"),address);
-    // else if (jugador.flags.distanciaBalon <= 1 && jugador.infoEquipo.minDistEnem <= 1 && jugador.infoEquipo.minDistEnem != -9343){
-    //         cout << "Tackleo" << endl;
-    //     socket.sendTo(("(tackle " + to_string(jugador.infoEquipo.minOriEnem) + ")"), address);
-    // }
     else if(jugador.flags.distanciaBalon <= 1 && jugador.infoEquipo.distPorteriaRival <= 35 && jugador.infoEquipo.distPorteriaRival != -9343){ /* Aqui la decision depende de la posicion del balon */
         socket.sendTo(golpearBalon("100", to_string(jugador.infoEquipo.oriPorteriaRival + 6)), address);        
     }
-    // si tenemos el balon cerca pasamos a un compañero
-    //  else if(jugador.flags.distanciaBalon <= 1 && jugador.infoEquipo.distPorteriaRival > 35 && (jugador.infoEquipo.minDistCompa > 10 || jugador.infoEquipo.minDistCompa < 30 )
-    //   && jugador.infoEquipo.minDistCompa != -9343 && jugador.infoEquipo.distPorteriaRival != -9343){
-    //     socket.sendTo(golpearBalon(to_string(jugador.infoEquipo.minDistCompa*2.5), to_string(jugador.infoEquipo.minOriCompa)), address);
-    //} //si estamos lejos de la porteria, tenemos el balon cerca y no hay buen pase corremos con el balon
     else if(jugador.flags.distanciaBalon <= 1 && jugador.infoEquipo.distPorteriaRival > 35){ //&& (jugador.infoEquipo.minDistCompa < 10 || jugador.infoEquipo.minDistCompa > 30 )){
         socket.sendTo(golpearBalon("20", to_string(jugador.infoEquipo.oriPorteriaRival)), address);
     } //si no veo la porteria y tengo que moverme, p
@@ -428,21 +412,6 @@ void arbolJugador10(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Min
             socket.sendTo("(dash 100)", address);
         }
     }
-    // else if(jugador.flags.distanciaBalon > 1){
-    //     //si estamos muy cerca del centro del campo volvemos a la porteria
-    //     //si hay alguien mas cerca que yo del balon le acompaño aunque lento por si acaso
-    //     if(jugador.infoEquipo.minDistCompa < jugador.flags.distanciaBalon && jugador.flags.distanciaBalon  != -9343 && jugador.infoEquipo.minDistCompa != -9343){
-    //         if((jugador.flags.distanciaBalon>1) && (((jugador.equipo=="l" && jugador.flags.distanciaPorteriaIzq != -9343) || (jugador.equipo=="r" && jugador.flags.distanciaPorteriaDer != -9343)) || ((jugador.equipo=="l" && jugador.flags.distanciaCornerIzq1!= -9343)||(jugador.equipo=="r" && jugador.flags.distanciaCornerDer1 != -9343)) || ((jugador.equipo=="l" && jugador.flags.distanciaCornerIzq2!= -9343)||(jugador.equipo=="r" && jugador.flags.distanciaCornerDer2 != -9343)))){
-    //             if (((jugador.equipo=="l") && (jugador.flags.distanciaPorteriaIzq > 47)) || ((jugador.equipo=="r") && (jugador.flags.distanciaPorteriaDer > 47)) )
-    //                 socket.sendTo("(dash 15)", address);
-    //         }
-    //         else
-    //             socket.sendTo("(dash 70)", address);
-    //     }
-    //     else{
-    //         socket.sendTo("(dash 100)", address);
-    //     }
-    // }
 }
 
 void arbolJugador11(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
