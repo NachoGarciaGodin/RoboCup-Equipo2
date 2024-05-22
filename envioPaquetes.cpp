@@ -345,7 +345,7 @@ void arbolJugador6(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Mini
         //    socket.sendTo(golpearBalon(to_string(jugador.infoEquipo.minDistCompa * 2.5), to_string(jugador.infoEquipo.minOriCompa )), address);
         //}// Y si estoy mas perdido que un pulpo en un garaje pues tiro para alante
         else{
-            socket.sendTo(golpearBalon("100", "0"), address);
+            socket.sendTo(golpearBalon("15", "180"), address);
         }
     }
     else if(jugador.flags.distanciaBalon > 20 && fondoMasCercano < 80 && fondoMasCercano != -1){
