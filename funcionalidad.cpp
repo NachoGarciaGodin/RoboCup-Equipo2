@@ -479,7 +479,7 @@ void limpiarDatosJugador(Jugador & jugador){
     jugador.infoEquipo.minDistEnem = -9343;
     jugador.infoEquipo.minOriEnem = -9343;
     jugador.flags.distanciaBalon = 3;
-    jugador.flags.orientacionBalon = 30;
+    jugador.flags.orientacionBalon = 50;
     jugador.siguienteComando.clear();
     jugador.flags.flagsFondoDerecha.clear();
     jugador.flags.flagsFondoIzquierda.clear();
