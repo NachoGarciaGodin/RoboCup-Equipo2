@@ -182,8 +182,25 @@ void arbolJugador2(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Mini
         socket.sendTo(orientarJugador(to_string(jugador.flags.orientacionBalon)), address);
     else if(jugador.flags.orientacionBalon < -10)
         socket.sendTo(orientarJugador(to_string(jugador.flags.orientacionBalon)), address);
-    else if(jugador.estadoPartido.saquePorteria && jugador.estadoPartido.saquePorteriaYo){
+    else if(jugador.estadoPartido.saqueBanda && jugador.estadoPartido.saqueBandaYo){
             if((jugador.infoEquipo.minDistCompa < jugador.flags.distanciaBalon) && (jugador.infoEquipo.minDistCompa != -9343))
+                socket.sendTo(("(dash 0)"),address);
+            else{ 
+                if(jugador.flags.distanciaBalon <= 0.6){
+                socket.sendTo(golpearBalon("80", "180"), address);    
+                }
+                else if (jugador.flags.distanciaBalon > 0.6 && jugador.flags.distanciaBalon <= 1){
+                    socket.sendTo(("(dash 50)"),address);
+                }
+                else{
+                    socket.sendTo(("(dash 100)"),address);
+                }
+            }
+    }
+    else if (jugador.estadoPartido.saqueBanda && !jugador.estadoPartido.saqueBandaYo)
+        socket.sendTo(("(dash 0)"),address);
+    else if(jugador.estadoPartido.saquePorteria && jugador.estadoPartido.saquePorteriaYo){
+        if((jugador.infoEquipo.minDistCompa < jugador.flags.distanciaBalon) && (jugador.infoEquipo.minDistCompa != -9343))
                 socket.sendTo(("(dash 0)"),address);
             else{ 
                 if(jugador.flags.distanciaBalon <= 0.6){
@@ -197,9 +214,7 @@ void arbolJugador2(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Mini
                 }
             }
     }
-    else if (jugador.estadoPartido.saqueBanda)
-        socket.sendTo(("(dash 0)"),address);
-    else if(jugador.estadoPartido.saquePorteria && jugador.estadoPartido.saquePorteriaYo)
+    else if(jugador.estadoPartido.saquePorteria && !jugador.estadoPartido.saquePorteriaYo) 
         socket.sendTo(("(dash 0)"),address);
 
     //ACCIONES DESPEJAR BALON 

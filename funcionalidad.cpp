@@ -271,9 +271,9 @@ void hearGol(string const & mensajeRecibido, Jugador & jugador){
         jugador.estadoPartido.colocarse = true;
     } else if(doubleParsedMsg.at(3).find("goal_kick_") != -1){
         jugador.estadoPartido.saquePorteria = true;
-        if(((doubleParsedMsg.at(3).find("_l")) != -1 ) && (jugador.numero==1) && (jugador.equipo == "l"))
+        if(((doubleParsedMsg.at(3).find("_l")) != -1 ) && (jugador.equipo == "l"))
             jugador.estadoPartido.saquePorteriaYo = true;
-        if(((doubleParsedMsg.at(3).find("_r")) != -1) && (jugador.numero==1) && (jugador.equipo == "r"))
+        if(((doubleParsedMsg.at(3).find("_r")) != -1) && (jugador.equipo == "r"))
             jugador.estadoPartido.saquePorteriaYo = true;
     }
 }
