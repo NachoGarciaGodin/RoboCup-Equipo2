@@ -4,6 +4,8 @@
 #make clean
 make
 
+cat banner.txt
+ 
 Puerto=6500
 
 # Verifica si make se ejecutó correctamente
