@@ -439,7 +439,7 @@ void arbolJugador10(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Min
         socket.sendTo("(dash 0)", address);
     else if (jugador.flags.distanciaBalon > 1){
         if((jugador.infoEquipo.minDistCompa < jugador.flags.distanciaBalon) && (jugador.flags.distanciaBalon  != -9343) && (jugador.infoEquipo.minDistCompa != -9343)){
-            socket.sendTo("(dash 30)", address);
+            socket.sendTo("(dash 50)", address);
         }else{
             socket.sendTo("(dash 100)", address);
         }
