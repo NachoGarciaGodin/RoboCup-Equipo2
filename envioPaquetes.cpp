@@ -50,13 +50,13 @@ void arbolDecisiones(Jugador & jugador, MinimalSocket::udp::Udp<true> & socket, 
             arbolJugador2(jugador, socket, address);
             break;
         case 3:
-            arbolJugador2(jugador, socket, address);
+            arbolJugador3(jugador, socket, address);
             break;
         case 4:
-            arbolJugador2(jugador, socket, address);
+            arbolJugador4(jugador, socket, address);
             break;
         case 5:
-            arbolJugador2(jugador, socket, address);
+            arbolJugador5(jugador, socket, address);
             break;
         case 6:
             arbolJugador6(jugador, socket, address);
@@ -112,10 +112,8 @@ void arbolJugador1(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Mini
     
 }
 
-void arbolJugador2(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
-    
-    float fondoMasCercano = -1;
-    float fondoMasLejano = -1;
+void funcionDefensas(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
+ 
     float bandaSuperiorMasCercana = -1;
     float bandaInferiorMasCercana = -1;
 
@@ -139,17 +137,7 @@ void arbolJugador2(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Mini
             bandaInferiorMasCercana = auxDistBandaInferiorMin;
         }
 
-        if(jugador.flags.flagsFondoDerecha.size() > 0){
-            float auxDistFondoMin = jugador.flags.flagsFondoDerecha[0];
-            float auxDistFondoMax = jugador.flags.flagsFondoDerecha[0];
-
-            for(auto flagFondo : jugador.flags.flagsFondoDerecha){
-                auxDistFondoMin = min(auxDistFondoMin, flagFondo);
-                auxDistFondoMax = max(auxDistFondoMax, flagFondo);
-            }
-            fondoMasCercano = auxDistFondoMin;
-            fondoMasLejano = auxDistFondoMax;
-        }
+     
     }else{
 
         if(jugador.flags.flagsBandaSuperiorDer.size() > 0){
@@ -168,18 +156,7 @@ void arbolJugador2(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Mini
             bandaInferiorMasCercana = auxDistBandaInferiorMin;
         }
 
-        if(jugador.flags.flagsFondoIzquierda.size() > 0){
-            float auxDistFondoMin = jugador.flags.flagsFondoIzquierda[0];
-            float auxDistFondoMax = jugador.flags.flagsFondoIzquierda[0];
-
-            for(auto flagFondo : jugador.flags.flagsFondoIzquierda){
-                auxDistFondoMin = min(auxDistFondoMin, flagFondo);
-                auxDistFondoMax = max(auxDistFondoMax, flagFondo);
-            }
-
-            fondoMasCercano = auxDistFondoMin;
-            fondoMasLejano = auxDistFondoMax;
-        }
+        
     }
 
     if(jugador.estadoPartido.saqueBanda && jugador.estadoPartido.saqueBandaYo){
@@ -239,34 +216,194 @@ void arbolJugador2(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, Mini
     //Si tengo el balon cerca por detras de mi corro hacia el balon 
     else if (jugador.infoEquipo.distMiPorteria != -9343 && jugador.flags.distanciaBalon > 1){
         socket.sendTo("(dash 100 "+ to_string(jugador.flags.orientacionBalon) + ")", address);
-    }//Si estoy lejos del balon y demasiafo arriba en el campo corro hacia mi posicion
-    else if(jugador.flags.distanciaBalon > 20 && fondoMasCercano < 90 && fondoMasCercano != -1){
-            socket.sendTo("(dash 50 180)", address);
-    }// si trngo el balon cerca corro hacia el al menos que este cerca del medio del campo
-    else if(jugador.flags.distanciaBalon > 1 &&  jugador.flags.distanciaBalon < 30 && (fondoMasCercano >= 70 || fondoMasCercano == -1)){
-        socket.sendTo("(dash 100 "+ to_string(jugador.flags.orientacionBalon) + ")", address);
+    }
+    else if(jugador.flags.distanciaBalon <= 1 && jugador.infoEquipo.minDistEnem <= 1 && jugador.infoEquipo.minDistEnem != -9343){
+        socket.sendTo(("(tackle " + to_string(jugador.flags.orientacionBalon) + ")"), address);
+    }
+
+}
+void arbolJugador2(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
+    funcionDefensas(jugador, socket, address);
+    float fondoMasCercano = -1;
+    float fondoMasLejano = -1;
+    if(jugador.equipo == "l"){
+        if(jugador.flags.flagsFondoDerecha.size() > 0){
+            float auxDistFondoMin = jugador.flags.flagsFondoDerecha[0];
+            float auxDistFondoMax = jugador.flags.flagsFondoDerecha[0];
+
+            for(auto flagFondo : jugador.flags.flagsFondoDerecha){
+                auxDistFondoMin = min(auxDistFondoMin, flagFondo);
+                auxDistFondoMax = max(auxDistFondoMax, flagFondo);
+            }
+            fondoMasCercano = auxDistFondoMin;
+            fondoMasLejano = auxDistFondoMax;
+        }
+    }else{
+        if(jugador.flags.flagsFondoIzquierda.size() > 0){
+            float auxDistFondoMin = jugador.flags.flagsFondoIzquierda[0];
+            float auxDistFondoMax = jugador.flags.flagsFondoIzquierda[0];
+
+            for(auto flagFondo : jugador.flags.flagsFondoIzquierda){
+                auxDistFondoMin = min(auxDistFondoMin, flagFondo);
+                auxDistFondoMax = max(auxDistFondoMax, flagFondo);
+            }
+
+            fondoMasCercano = auxDistFondoMin;
+            fondoMasLejano = auxDistFondoMax;
+        }
     }
     
+    if(jugador.flags.distanciaBalon > 1 &&  jugador.flags.distanciaBalon < 30 && (fondoMasCercano >= 70 || fondoMasCercano == -1)){
+        socket.sendTo("(dash 100 "+ to_string(jugador.flags.orientacionBalon) + ")", address);
+    }else if(jugador.flags.distanciaBalon > 20 && fondoMasCercano < 80 && fondoMasCercano != -1){
+            if(jugador.flags.distanciaCentroCampo2 > 70)
+                socket.sendTo("(dash 70 0)", address);
+            else if(jugador.flags.distanciaCentroCampo1 < 30 || jugador.flags.distanciaCentroCampo < 40)
+                socket.sendTo("(dash 50 180)", address);
+            else if(jugador.flags.distanciaCentroCampo2 == 70 || jugador.flags.distanciaCentroCampo1 == 30 || jugador.flags.distanciaCentroCampo == 40)
+                socket.sendTo("(dash 0 0)", address);
+            
+    }//
 }
 
 void arbolJugador3(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
 
-    if(jugador.estadoPartido.saquePorteria){
-        if(jugador.flags.distanciaBalon > 1)
-            socket.sendTo("(dash 50)", address);
-        else if (jugador.flags.distanciaBalon <= 1)
-            socket.sendTo(golpearBalon("100", "0"), address);
+   funcionDefensas(jugador, socket, address);
+    float fondoMasCercano = -1;
+    float fondoMasLejano = -1;
+    if(jugador.equipo == "l"){
+        if(jugador.flags.flagsFondoDerecha.size() > 0){
+            float auxDistFondoMin = jugador.flags.flagsFondoDerecha[0];
+            float auxDistFondoMax = jugador.flags.flagsFondoDerecha[0];
+
+            for(auto flagFondo : jugador.flags.flagsFondoDerecha){
+                auxDistFondoMin = min(auxDistFondoMin, flagFondo);
+                auxDistFondoMax = max(auxDistFondoMax, flagFondo);
+            }
+            fondoMasCercano = auxDistFondoMin;
+            fondoMasLejano = auxDistFondoMax;
+        }
+    }else{
+        if(jugador.flags.flagsFondoIzquierda.size() > 0){
+            float auxDistFondoMin = jugador.flags.flagsFondoIzquierda[0];
+            float auxDistFondoMax = jugador.flags.flagsFondoIzquierda[0];
+
+            for(auto flagFondo : jugador.flags.flagsFondoIzquierda){
+                auxDistFondoMin = min(auxDistFondoMin, flagFondo);
+                auxDistFondoMax = max(auxDistFondoMax, flagFondo);
+            }
+
+            fondoMasCercano = auxDistFondoMin;
+            fondoMasLejano = auxDistFondoMax;
+        }
     }
 
+   
+     if(jugador.flags.distanciaBalon > 1 &&  jugador.flags.distanciaBalon < 30 && (fondoMasCercano >= 70 || fondoMasCercano == -1)){
+        socket.sendTo("(dash 100 "+ to_string(jugador.flags.orientacionBalon) + ")", address);
+    }else if(jugador.flags.distanciaBalon > 20 && fondoMasCercano < 80 && fondoMasCercano != -1){
+            if(jugador.flags.distanciaCentroCampo2 > 40)
+                socket.sendTo("(dash 70 0)", address);
+            else if(jugador.flags.distanciaCentroCampo1 < 40 || jugador.flags.distanciaCentroCampo < 40)
+                socket.sendTo("(dash 50 180)", address);
+            else if(jugador.flags.distanciaCentroCampo2 == 70 || jugador.flags.distanciaCentroCampo1 == 40 || jugador.flags.distanciaCentroCampo == 40)
+                socket.sendTo("(dash 0 0)", address);
+    }
+
+    
     //TODO
 
 }
 
 void arbolJugador4(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
+
+    funcionDefensas(jugador, socket, address);
+    float fondoMasCercano = -1;
+    float fondoMasLejano = -1;
+    if(jugador.equipo == "l"){
+        if(jugador.flags.flagsFondoDerecha.size() > 0){
+            float auxDistFondoMin = jugador.flags.flagsFondoDerecha[0];
+            float auxDistFondoMax = jugador.flags.flagsFondoDerecha[0];
+
+            for(auto flagFondo : jugador.flags.flagsFondoDerecha){
+                auxDistFondoMin = min(auxDistFondoMin, flagFondo);
+                auxDistFondoMax = max(auxDistFondoMax, flagFondo);
+            }
+            fondoMasCercano = auxDistFondoMin;
+            fondoMasLejano = auxDistFondoMax;
+        }
+    }else{
+        if(jugador.flags.flagsFondoIzquierda.size() > 0){
+            float auxDistFondoMin = jugador.flags.flagsFondoIzquierda[0];
+            float auxDistFondoMax = jugador.flags.flagsFondoIzquierda[0];
+
+            for(auto flagFondo : jugador.flags.flagsFondoIzquierda){
+                auxDistFondoMin = min(auxDistFondoMin, flagFondo);
+                auxDistFondoMax = max(auxDistFondoMax, flagFondo);
+            }
+
+            fondoMasCercano = auxDistFondoMin;
+            fondoMasLejano = auxDistFondoMax;
+        }
+    }
+
+   
+    if(jugador.flags.distanciaBalon > 1 &&  jugador.flags.distanciaBalon < 30 && (fondoMasCercano >= 70 || fondoMasCercano == -1)){
+        socket.sendTo("(dash 100 "+ to_string(jugador.flags.orientacionBalon) + ")", address);
+    }else if(jugador.flags.distanciaBalon > 20 && fondoMasCercano < 80 && fondoMasCercano != -1){
+            if(jugador.flags.distanciaCentroCampo1 > 40)
+                socket.sendTo("(dash 70 0)", address);
+            else if(jugador.flags.distanciaCentroCampo2 < 40 || jugador.flags.distanciaCentroCampo < 40)
+                socket.sendTo("(dash 50 180)", address);
+            else if(jugador.flags.distanciaCentroCampo1 == 70 || jugador.flags.distanciaCentroCampo2 == 40 || jugador.flags.distanciaCentroCampo == 40)
+                socket.sendTo("(dash 0 0)", address);
     //TODO
 
+    }
 }
 void arbolJugador5(Jugador jugador, MinimalSocket::udp::Udp<true> & socket, MinimalSocket::Address const & address){
+
+    funcionDefensas(jugador, socket, address);
+    float fondoMasCercano = -1;
+    float fondoMasLejano = -1;
+    if(jugador.equipo == "l"){
+        if(jugador.flags.flagsFondoDerecha.size() > 0){
+            float auxDistFondoMin = jugador.flags.flagsFondoDerecha[0];
+            float auxDistFondoMax = jugador.flags.flagsFondoDerecha[0];
+
+            for(auto flagFondo : jugador.flags.flagsFondoDerecha){
+                auxDistFondoMin = min(auxDistFondoMin, flagFondo);
+                auxDistFondoMax = max(auxDistFondoMax, flagFondo);
+            }
+            fondoMasCercano = auxDistFondoMin;
+            fondoMasLejano = auxDistFondoMax;
+        }
+    }else{
+        if(jugador.flags.flagsFondoIzquierda.size() > 0){
+            float auxDistFondoMin = jugador.flags.flagsFondoIzquierda[0];
+            float auxDistFondoMax = jugador.flags.flagsFondoIzquierda[0];
+
+            for(auto flagFondo : jugador.flags.flagsFondoIzquierda){
+                auxDistFondoMin = min(auxDistFondoMin, flagFondo);
+                auxDistFondoMax = max(auxDistFondoMax, flagFondo);
+            }
+
+            fondoMasCercano = auxDistFondoMin;
+            fondoMasLejano = auxDistFondoMax;
+        }
+    }
+     // si trngo el balon cerca corro hacia el al menos que este cerca del medio del campo
+    if(jugador.flags.distanciaBalon > 1 &&  jugador.flags.distanciaBalon < 30 && (fondoMasCercano >= 70 || fondoMasCercano == -1)){
+        socket.sendTo("(dash 100 "+ to_string(jugador.flags.orientacionBalon) + ")", address);
+    }else if(jugador.flags.distanciaBalon > 20 && fondoMasCercano < 80 && fondoMasCercano != -1){
+            if(jugador.flags.distanciaCentroCampo1 > 70)
+                socket.sendTo("(dash 70 0)", address);
+            else if(jugador.flags.distanciaCentroCampo2 < 30 || jugador.flags.distanciaCentroCampo < 40)
+                socket.sendTo("(dash 50 180)", address);
+            else if(jugador.flags.distanciaCentroCampo1 == 70 || jugador.flags.distanciaCentroCampo2 == 30 || jugador.flags.distanciaCentroCampo == 40)
+                socket.sendTo("(dash 0 0)", address);
+            
+    }//
 
    //TODO
 
